@@ -28,4 +28,27 @@ public class AttendanceController(AttendanceService attendanceService) : Control
             return StatusCode(500, new { message = $"Error occurred: {ex.Message}" });
         }
     }
+
+    [HttpGet("clock/{clockId}")]
+    public async Task<IActionResult> GetClockEvent(string clockId)
+    {
+        try
+        {
+            var clockEvents = await attendanceService.GetClockEventsByClockId(clockId);
+            
+            var result = clockEvents.Select(retrievedEvent => new
+            {
+                retrievedEvent.ClockId,
+                retrievedEvent.Type,
+                retrievedEvent.Timestamp
+            });
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error retrieving clock events for id {clockId}: {ex.Message}");
+            return StatusCode(500, new { message = $"Error occurred: {ex.Message}" });
+        }
+    }
 }

@@ -1,10 +1,10 @@
 ﻿using employee_management_backend.Database;
 using employee_management_backend.Model;
-using employee_management_backend.Repository.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace employee_management_backend.Repository;
 
-public class AttendanceRepository(AttendanceDbContext context) : IAttendanceRepository
+public class AttendanceRepository(AttendanceDbContext context)
 {
     public async Task SaveClockEvent(ClockEvent clockEvent)
     {
@@ -19,5 +19,12 @@ public class AttendanceRepository(AttendanceDbContext context) : IAttendanceRepo
             Console.WriteLine($"Error occurred: {ex.Message}");
             throw;
         }
+    }
+    
+    public async Task<List<ClockEvent>> GetClockEventsByClockId(string clockId)
+    {
+        return await context.attendance
+            .Where(clockEvent => clockEvent.ClockId == clockId)
+            .ToListAsync();
     }
 }
