@@ -9,7 +9,7 @@ namespace employee_management_backend.Controller;
 public class AttendanceController(AttendanceService attendanceService) : ControllerBase
 {
     [HttpPost("clock")]
-    public async Task <IActionResult> PostClockEvent([FromBody] ClockEvent clockEvent)
+    public async Task<IActionResult> PostClockEvent([FromBody] ClockEvent clockEvent)
     {
         if (clockEvent.ClockId == "")
         {
@@ -35,13 +35,14 @@ public class AttendanceController(AttendanceService attendanceService) : Control
         try
         {
             var clockEvents = await attendanceService.GetClockEventsByClockId(clockId);
-            
+
             var result = clockEvents.Select(retrievedEvent => new
-            {
-                retrievedEvent.ClockId,
-                retrievedEvent.Type,
-                retrievedEvent.Timestamp
-            });
+                {
+                    retrievedEvent.ClockId,
+                    retrievedEvent.Type,
+                    Timestamp = retrievedEvent.Timestamp.ToLocalTime()
+                })
+                .ToList();
 
             return Ok(result);
         }
