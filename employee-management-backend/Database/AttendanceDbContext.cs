@@ -1,8 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using employee_management_backend.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace employee_management_backend.Database;
 
-public class EmployeeDatabase : DbContext
+public class AttendanceDbContext : DbContext
 {
-    public EmployeeDatabase(DbContextOptions<EmployeeDatabase> options) : base(options) { }
+    // ReSharper disable once InconsistentNaming
+    public DbSet<ClockEvent> attendance { get; set; }
+
+    public AttendanceDbContext(DbContextOptions<AttendanceDbContext> options) : base(options)
+    {
+    }
 }

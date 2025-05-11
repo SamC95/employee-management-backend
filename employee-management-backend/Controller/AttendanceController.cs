@@ -1,19 +1,31 @@
-﻿using employee_management_backend.Service;
+﻿using employee_management_backend.Model;
+using employee_management_backend.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace employee_management_backend.Controller;
 
 [ApiController]
 [Route("api/attendance")]
-public class ClockEventController : ControllerBase
+public class AttendanceController(AttendanceService attendanceService) : ControllerBase
 {
-    private readonly ClockEventService _clockEventService;
-
-    public ClockEventController(ClockEventService clockEventService)
+    [HttpPost("clock")]
+    public async Task <IActionResult> PostClockEvent([FromBody] ClockEvent clockEvent)
     {
-        _clockEventService = clockEventService;
+        if (clockEvent.ClockId == "")
+        {
+            return BadRequest("Invalid clock event data");
+        }
+
+        try
+        {
+            Console.WriteLine($"Clock ID: {clockEvent.ClockId}, Type: {clockEvent.Type}, Timestamp: {clockEvent.Timestamp}, EventId: {clockEvent.EventId}");
+            await attendanceService.PostClockEvent(clockEvent);
+
+            return Ok(new { message = "Clock event saved successfully" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = $"Error occurred: {ex.Message}" });
+        }
     }
-    
-    [HttpGet("clock")]
-    public async Task<IActionResult> 
 }

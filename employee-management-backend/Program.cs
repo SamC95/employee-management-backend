@@ -1,41 +1,48 @@
+using employee_management_backend.Database;
+using employee_management_backend.Model;
+using employee_management_backend.Repository;
+using employee_management_backend.Repository.Interface;
+using employee_management_backend.Service;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Configuration.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
+
+builder.Services.AddScoped<AttendanceService>();
+builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+
+var dbSettingsSection = builder.Configuration.GetSection("DatabaseSettings");
+builder.Services.Configure<DatabaseSettings>(dbSettingsSection);
+var dbSettings = dbSettingsSection.Get<DatabaseSettings>();
+
+if (dbSettings == null)
+{
+    throw new Exception("Database settings are missing or invalid.");
+}
+
+var connectionString =
+    $"Host={dbSettings?.Host};Port={dbSettings?.Port};Username={dbSettings?.Username};Password={dbSettings?.Password};Database={dbSettings?.DatabaseName}";
+
+builder.Services.AddDbContext<AttendanceDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
+builder.Services.AddHttpClient();
+builder.Services.AddControllers();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        corsPolicyBuilder => { corsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+app.UseRouting();
+app.UseAuthorization();
 
-app.UseHttpsRedirection();
+app.UseCors("AllowFrontendOrigin");
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
