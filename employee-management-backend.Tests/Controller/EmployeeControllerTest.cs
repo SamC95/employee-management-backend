@@ -118,4 +118,56 @@ public class EmployeeControllerTest
         
         _mockService.Verify(service => service.GetEmployeeById("12345678"), Times.Once);
     }
+
+    [Fact]
+    public async Task CheckClockIdExists_ReturnsTrue_WhenClockIdExists()
+    {
+        const string clockId = "1234567";
+        
+        _mockService.Setup(service => service.CheckClockIdExists(clockId)).ReturnsAsync(true);
+        
+        var result = await _employeeController.CheckClockIdExists(clockId);
+        
+        var objectResult = Assert.IsType<OkObjectResult>(result);
+        
+        Assert.NotNull(objectResult.Value);
+        Assert.Equal(200, objectResult.StatusCode);
+        Assert.Equal(true, objectResult.Value);
+        
+        _mockService.Verify(service => service.CheckClockIdExists(clockId), Times.Once);
+    }
+
+    [Fact]
+    public async Task CheckClockIdExists_ReturnsFalse_WhenClockIdDoesNotExist()
+    {
+        const string clockId = "999999";
+        
+        _mockService.Setup(service => service.CheckClockIdExists(clockId)).ReturnsAsync(false);
+        
+        var result = await _employeeController.CheckClockIdExists(clockId);
+        
+        var objectResult = Assert.IsType<OkObjectResult>(result);
+        
+        Assert.NotNull(objectResult.Value);
+        Assert.Equal(200, objectResult.StatusCode);
+        Assert.Equal(false, objectResult.Value);
+        
+        _mockService.Verify(service => service.CheckClockIdExists(clockId), Times.Once);
+    }
+
+    [Fact]
+    public async Task CheckClockIdExists_WhenServiceFails_ReturnsInternalServerError()
+    {
+        const string clockId = "1234567";
+        _mockService.Setup(service => service.CheckClockIdExists(clockId)).Throws<Exception>();
+        
+        var result = await _employeeController.CheckClockIdExists(clockId);
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        
+        Assert.NotNull(objectResult.Value);
+        Assert.Equal(500, objectResult.StatusCode);
+        Assert.Contains("unexpected error", objectResult.Value.ToString());
+        
+        _mockService.Verify(service => service.CheckClockIdExists(clockId), Times.Once);
+    }
 }

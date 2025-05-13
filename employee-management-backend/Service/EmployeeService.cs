@@ -15,4 +15,9 @@ public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployee
     {
         return await employeeRepository.GetEmployeeById(employeeId);
     }
+
+    public async Task<bool?> CheckClockIdExists(string clockId)
+    {
+        return await employeeRepository.CheckClockIdExists(clockId);
+    }
 }

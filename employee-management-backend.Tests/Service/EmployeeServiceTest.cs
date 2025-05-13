@@ -52,4 +52,12 @@ public class EmployeeServiceTest
         
         _mockRepository.Verify(repo => repo.GetEmployeeById(_testEmployee.EmployeeId));
     }
+
+    [Fact]
+    public async Task CheckClockIdExists_CallsRepository()
+    {
+        await _employeeService.CheckClockIdExists(_testEmployee.ClockId);
+        
+        _mockRepository.Verify(repo => repo.CheckClockIdExists(_testEmployee.ClockId));
+    }
 }

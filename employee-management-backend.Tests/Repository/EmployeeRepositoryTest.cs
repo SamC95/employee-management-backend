@@ -103,4 +103,26 @@ public class EmployeeRepositoryTest
         
         Assert.Null(result);
     }
+
+    [Fact]
+    public async Task CheckClockIdExists_ReturnsTrue_WhenFound()
+    {
+        _context.Employees.Add(_testEmployee);
+        await _context.SaveChangesAsync();
+        
+        var result = await _repository.CheckClockIdExists(_testEmployee.ClockId);
+        
+        Assert.NotNull(result);
+        Assert.True(result);
+    }
+
+    public async Task CheckClockIdExists_ReturnsFalse_WhenNotFound()
+    {
+        const string clockId = "999999";
+        
+        var result = await _repository.CheckClockIdExists(clockId);
+        
+        Assert.NotNull(result);
+        Assert.False(result);
+    }
 }

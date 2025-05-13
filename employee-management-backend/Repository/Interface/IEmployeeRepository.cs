@@ -7,4 +7,6 @@ public interface IEmployeeRepository
     Task CreateEmployee(Employee employee);
     
     Task<Employee?> GetEmployeeById(string employeeId);
+    
+    Task<bool?> CheckClockIdExists(string clockId);
 }
