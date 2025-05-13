@@ -30,7 +30,7 @@ public class EmployeeController(IEmployeeService employeeService) : ControllerBa
         {
             var employee = await employeeService.GetEmployeeById(employeeId);
 
-            return Ok(employee);
+            return employee == null ? Ok(new {}) : Ok(employee);
         }
         catch (Exception ex)
         {
