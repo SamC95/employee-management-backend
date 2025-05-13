@@ -5,8 +5,8 @@ namespace employee_management_backend.Model;
 public class Employee
 {
     [Key]
-    public required int EmployeeId { get; set; }
-    public required int ClockId { get; set; }
+    public required string EmployeeId { get; set; }
+    public required string ClockId { get; set; }
     public required string FirstName { get; set; }
     public string? MiddleName { get; set; }
     public required string LastName { get; set; }

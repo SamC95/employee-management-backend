@@ -1,17 +1,19 @@
 using employee_management_backend.Database;
 using employee_management_backend.Model;
 using employee_management_backend.Repository;
+using employee_management_backend.Repository.Interface;
 using employee_management_backend.Service;
+using employee_management_backend.Service.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
 
-builder.Services.AddScoped<AttendanceService>();
-builder.Services.AddScoped<EmployeeService>();
-builder.Services.AddScoped<AttendanceRepository>();
-builder.Services.AddScoped<EmployeeRepository>();
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 var dbSettingsSection = builder.Configuration.GetSection("DatabaseSettings");
 builder.Services.Configure<DatabaseSettings>(dbSettingsSection);

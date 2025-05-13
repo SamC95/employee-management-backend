@@ -1,10 +1,11 @@
 ﻿using employee_management_backend.Database;
 using employee_management_backend.Model;
+using employee_management_backend.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace employee_management_backend.Repository;
 
-public class AttendanceRepository(AttendanceDbContext context)
+public class AttendanceRepository(AttendanceDbContext context) : IAttendanceRepository
 {
     public async Task SaveClockEvent(ClockEvent clockEvent)
     {

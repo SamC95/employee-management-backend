@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "employee-management-backend", "employee-management-backend\employee-management-backend.csproj", "{25CDAE17-861E-49F3-82F8-2EDAD047690B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "employee-management-backend.Tests", "employee-management-backend.Tests\employee-management-backend.Tests.csproj", "{C65B9393-CF38-434F-BB99-8AE8AB1F8514}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{25CDAE17-861E-49F3-82F8-2EDAD047690B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25CDAE17-861E-49F3-82F8-2EDAD047690B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25CDAE17-861E-49F3-82F8-2EDAD047690B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C65B9393-CF38-434F-BB99-8AE8AB1F8514}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C65B9393-CF38-434F-BB99-8AE8AB1F8514}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C65B9393-CF38-434F-BB99-8AE8AB1F8514}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C65B9393-CF38-434F-BB99-8AE8AB1F8514}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

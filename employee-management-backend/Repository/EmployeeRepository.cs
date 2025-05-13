@@ -1,9 +1,11 @@
 ﻿using employee_management_backend.Database;
 using employee_management_backend.Model;
+using employee_management_backend.Repository.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace employee_management_backend.Repository;
 
-public class EmployeeRepository(EmployeeDbContext context)
+public class EmployeeRepository(EmployeeDbContext context) : IEmployeeRepository
 {
     public async Task CreateEmployee(Employee employee)
     {
@@ -18,5 +20,11 @@ public class EmployeeRepository(EmployeeDbContext context)
             Console.WriteLine($"Error occurred adding employee to database: {ex.Message}");
             throw;
         }
+    }
+
+    public async Task<Employee?> GetEmployeeById(string employeeId)
+    {
+        return await context.Employees
+            .FirstOrDefaultAsync(employee => employee.EmployeeId == employeeId);
     }
 }

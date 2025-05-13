@@ -1,12 +1,12 @@
 ﻿using employee_management_backend.Model;
-using employee_management_backend.Service;
+using employee_management_backend.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace employee_management_backend.Controller;
 
 [ApiController]
 [Route("api/attendance")]
-public class AttendanceController(AttendanceService attendanceService) : ControllerBase
+public class AttendanceController(IAttendanceService attendanceService) : ControllerBase
 {
     [HttpPost("clock")]
     public async Task<IActionResult> PostClockEvent([FromBody] ClockEvent clockEvent)

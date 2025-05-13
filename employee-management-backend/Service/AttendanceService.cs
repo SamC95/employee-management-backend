@@ -1,9 +1,10 @@
 ﻿using employee_management_backend.Model;
-using employee_management_backend.Repository;
+using employee_management_backend.Repository.Interface;
+using employee_management_backend.Service.Interface;
 
 namespace employee_management_backend.Service;
 
-public class AttendanceService(AttendanceRepository attendanceRepository)
+public class AttendanceService(IAttendanceRepository attendanceRepository) : IAttendanceService
 {
     public async Task PostClockEvent(ClockEvent clockEvent)
     {
