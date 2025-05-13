@@ -1,1 +1,6 @@
-﻿http://localhost:5000/api/employee/77932819
+﻿// GetEmployeeById
+http://localhost:5000/api/employee/77932819
+
+###
+// CheckClockIdExists
+http://localhost:5000/api/employee/clock/297351
