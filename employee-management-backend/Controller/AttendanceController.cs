@@ -30,7 +30,7 @@ public class AttendanceController(AttendanceService attendanceService) : Control
     }
 
     [HttpGet("clock/{clockId}")]
-    public async Task<IActionResult> GetClockEvent(string clockId)
+    public async Task<IActionResult> GetClockEventsByClockId(string clockId)
     {
         try
         {

@@ -3,24 +3,17 @@ using employee_management_backend.Repository;
 
 namespace employee_management_backend.Service;
 
-public class AttendanceService
+public class AttendanceService(AttendanceRepository attendanceRepository)
 {
-    private readonly AttendanceRepository _repository;
-
-    public AttendanceService(AttendanceRepository repository)
-    {
-        _repository = repository;
-    }
-
     public async Task PostClockEvent(ClockEvent clockEvent)
     {
         clockEvent.Timestamp = clockEvent.Timestamp.ToUniversalTime();
         
-        await _repository.SaveClockEvent(clockEvent);
+        await attendanceRepository.SaveClockEvent(clockEvent);
     }
 
     public async Task<List<ClockEvent>> GetClockEventsByClockId(string clockId)
     {
-        return await _repository.GetClockEventsByClockId(clockId);
+        return await attendanceRepository.GetClockEventsByClockId(clockId);
     }
 }

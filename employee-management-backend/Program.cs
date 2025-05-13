@@ -9,7 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
 
 builder.Services.AddScoped<AttendanceService>();
+builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddScoped<AttendanceRepository>();
+builder.Services.AddScoped<EmployeeRepository>();
 
 var dbSettingsSection = builder.Configuration.GetSection("DatabaseSettings");
 builder.Services.Configure<DatabaseSettings>(dbSettingsSection);
@@ -24,6 +26,8 @@ var connectionString =
     $"Host={dbSettings?.Host};Port={dbSettings?.Port};Username={dbSettings?.Username};Password={dbSettings?.Password};Database={dbSettings?.DatabaseName}";
 
 builder.Services.AddDbContext<AttendanceDbContext>(options =>
+    options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<EmployeeDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddHttpClient();
