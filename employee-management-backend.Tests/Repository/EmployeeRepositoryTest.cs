@@ -116,6 +116,7 @@ public class EmployeeRepositoryTest
         Assert.True(result);
     }
 
+    [Fact]
     public async Task CheckClockIdExists_ReturnsFalse_WhenNotFound()
     {
         const string clockId = "999999";
