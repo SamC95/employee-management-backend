@@ -35,6 +35,7 @@ public class EmployeeControllerTest
         IsAdmin = false,
         IsManager = false,
         IsActive = true,
+        JobTitle = "Graphic Designer"
     };
 
     /*
@@ -59,13 +60,13 @@ public class EmployeeControllerTest
     public async Task CreateEmployee_WhenServiceFails_ReturnsInternalServerError()
     {
         _mockService.Setup(service => service.CreateEmployee(It.IsAny<Employee>())).Throws<Exception>();
-        
+
         var result = await _employeeController.CreateEmployee(_testEmployee);
-        
+
         var objectResult = Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, objectResult.StatusCode);
         Assert.NotNull(objectResult.Value);
-        
+
         _mockService.Verify(service => service.CreateEmployee(_testEmployee), Times.Once);
     }
 
@@ -73,14 +74,14 @@ public class EmployeeControllerTest
     public async Task GetEmployeeById_ValidId_ReturnsOk()
     {
         _mockService.Setup(service => service.GetEmployeeById("12345678")).ReturnsAsync(_testEmployee);
-        
+
         var result = await _employeeController.GetEmployeeById("12345678");
-        
+
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
         Assert.NotNull(okResult.Value);
         Assert.Equal(_testEmployee, okResult.Value);
-        
+
         _mockService.Verify(service => service.GetEmployeeById("12345678"), Times.Once);
     }
 
@@ -88,17 +89,17 @@ public class EmployeeControllerTest
     public async Task GetEmployeeById_NoMatch_ReturnsEmptyObject()
     {
         const string employeeId = "9999999";
-        
+
         _mockService.Setup(service => service.GetEmployeeById(employeeId)).ReturnsAsync((Employee?)null);
-        
+
         var result = await _employeeController.GetEmployeeById(employeeId);
-        
+
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
-        
+
         var returnedValue = okResult.Value;
         Assert.NotNull(returnedValue);
-        
+
         var returnedAnonymousType = returnedValue.GetType();
 
         var properties = returnedAnonymousType.GetProperties();
@@ -109,31 +110,72 @@ public class EmployeeControllerTest
     public async Task GetEmployeeById_WhenServiceFails_ReturnsInternalServerError()
     {
         _mockService.Setup(service => service.GetEmployeeById(It.IsAny<string>())).Throws<Exception>();
-        
+
         var result = await _employeeController.GetEmployeeById("12345678");
-        
+
         var objectResult = Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, objectResult.StatusCode);
         Assert.NotNull(objectResult.Value);
-        
+
         _mockService.Verify(service => service.GetEmployeeById("12345678"), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetEmployeesByJobTitle_ReturnsOk_WhenMatchFound()
+    {
+        const string jobTitle = "Graphic Designer";
+        var employeeList = new List<Employee>
+        {
+            _testEmployee
+        };
+        
+        _mockService.Setup(service => service.GetEmployeesByJobTitle(jobTitle)).ReturnsAsync(employeeList);
+
+        var result = await _employeeController.GetEmployeesByJobTitle(jobTitle);
+
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(200, okResult.StatusCode);
+        
+        var returnValue = Assert.IsAssignableFrom<IEnumerable<Employee>>(okResult.Value);
+        Assert.Single(returnValue);
+        
+        _mockService.Verify(service => service.GetEmployeesByJobTitle(jobTitle), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetEmployeesByJobTitle_ReturnsOk_WithEmptyList_WhenNoMatchFound()
+    {
+        const string jobTitle = "Software Developer";
+        var emptyList = new List<Employee>();
+        
+        _mockService.Setup(service => service.GetEmployeesByJobTitle(jobTitle)).ReturnsAsync(emptyList);
+        
+        var result = await _employeeController.GetEmployeesByJobTitle(jobTitle);
+        
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(200, okResult.StatusCode);
+        
+        var returnValue = Assert.IsAssignableFrom<IEnumerable<Employee>>(okResult.Value);
+        Assert.Empty(returnValue);
+        
+        _mockService.Verify(service => service.GetEmployeesByJobTitle(jobTitle), Times.Once);
     }
 
     [Fact]
     public async Task CheckClockIdExists_ReturnsTrue_WhenClockIdExists()
     {
         const string clockId = "1234567";
-        
+
         _mockService.Setup(service => service.CheckClockIdExists(clockId)).ReturnsAsync(true);
-        
+
         var result = await _employeeController.CheckClockIdExists(clockId);
-        
+
         var objectResult = Assert.IsType<OkObjectResult>(result);
-        
+
         Assert.NotNull(objectResult.Value);
         Assert.Equal(200, objectResult.StatusCode);
         Assert.Equal(true, objectResult.Value);
-        
+
         _mockService.Verify(service => service.CheckClockIdExists(clockId), Times.Once);
     }
 
@@ -141,17 +183,17 @@ public class EmployeeControllerTest
     public async Task CheckClockIdExists_ReturnsFalse_WhenClockIdDoesNotExist()
     {
         const string clockId = "999999";
-        
+
         _mockService.Setup(service => service.CheckClockIdExists(clockId)).ReturnsAsync(false);
-        
+
         var result = await _employeeController.CheckClockIdExists(clockId);
-        
+
         var objectResult = Assert.IsType<OkObjectResult>(result);
-        
+
         Assert.NotNull(objectResult.Value);
         Assert.Equal(200, objectResult.StatusCode);
         Assert.Equal(false, objectResult.Value);
-        
+
         _mockService.Verify(service => service.CheckClockIdExists(clockId), Times.Once);
     }
 
@@ -160,14 +202,14 @@ public class EmployeeControllerTest
     {
         const string clockId = "1234567";
         _mockService.Setup(service => service.CheckClockIdExists(clockId)).Throws<Exception>();
-        
+
         var result = await _employeeController.CheckClockIdExists(clockId);
         var objectResult = Assert.IsType<ObjectResult>(result);
-        
+
         Assert.NotNull(objectResult.Value);
         Assert.Equal(500, objectResult.StatusCode);
         Assert.Contains("unexpected error", objectResult.Value.ToString());
-        
+
         _mockService.Verify(service => service.CheckClockIdExists(clockId), Times.Once);
     }
 }

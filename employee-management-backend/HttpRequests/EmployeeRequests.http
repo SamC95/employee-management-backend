@@ -1,5 +1,9 @@
 ﻿// GetEmployeeById
-http://localhost:5000/api/employee/77932819
+http://localhost:5000/api/employee/id/77932819
+
+###
+// GetEmployeesByJobTitle
+http://localhost:5000/api/employee/assistant manager
 
 ###
 // CheckClockIdExists

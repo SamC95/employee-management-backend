@@ -16,6 +16,13 @@ public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployee
         return await employeeRepository.GetEmployeeById(employeeId);
     }
 
+    public async Task<List<Employee>> GetEmployeesByJobTitle(string jobTitle)
+    {
+        jobTitle = string.Join(" ", jobTitle.Split(" ").Select(word => char.ToUpper(word[0]) + word[1..]));
+        
+        return await employeeRepository.GetEmployeesByJobTitle(jobTitle);
+    }
+
     public async Task<bool?> CheckClockIdExists(string clockId)
     {
         return await employeeRepository.CheckClockIdExists(clockId);

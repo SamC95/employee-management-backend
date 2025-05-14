@@ -8,5 +8,7 @@ public interface IEmployeeService
     
     Task<Employee?> GetEmployeeById(string employeeId);
     
+    Task<List<Employee>> GetEmployeesByJobTitle(string jobTitle);
+    
     Task<bool?> CheckClockIdExists(string clockId);
 }

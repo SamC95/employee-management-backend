@@ -27,6 +27,13 @@ public class EmployeeRepository(EmployeeDbContext context) : IEmployeeRepository
         return await context.Employees
             .FirstOrDefaultAsync(employee => employee.EmployeeId == employeeId);
     }
+
+    public async Task<List<Employee>> GetEmployeesByJobTitle(string jobTitle)
+    {
+        return await context.Employees
+            .Where(employee => employee.JobTitle == jobTitle)
+            .ToListAsync();
+    }
     
     public async Task<bool?> CheckClockIdExists(string clockId)
     {

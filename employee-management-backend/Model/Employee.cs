@@ -22,4 +22,5 @@ public class Employee
     public required bool IsAdmin { get; set; }
     public required bool IsManager { get; set; }
     public required bool IsActive { get; set; }
+    public required string JobTitle { get; set; }
 }

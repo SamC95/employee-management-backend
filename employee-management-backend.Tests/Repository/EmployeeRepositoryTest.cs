@@ -38,6 +38,7 @@ public class EmployeeRepositoryTest
         IsAdmin = false,
         IsManager = false,
         IsActive = true,
+        JobTitle = "Graphic Designer",
     };
 
     [Fact]
@@ -65,6 +66,7 @@ public class EmployeeRepositoryTest
         Assert.Equal(_testEmployee.IsAdmin, savedEmployee.IsAdmin);
         Assert.Equal(_testEmployee.IsManager, savedEmployee.IsManager);
         Assert.Equal(_testEmployee.IsActive, savedEmployee.IsActive);
+        Assert.Equal(_testEmployee.JobTitle, savedEmployee.JobTitle);
     }
 
     [Fact]
@@ -92,6 +94,7 @@ public class EmployeeRepositoryTest
         Assert.Equal(_testEmployee.IsAdmin, result.IsAdmin);
         Assert.Equal(_testEmployee.IsManager, result.IsManager);
         Assert.Equal(_testEmployee.IsActive, result.IsActive);
+        Assert.Equal(_testEmployee.JobTitle, result.JobTitle);
     }
 
     [Fact]
@@ -102,6 +105,29 @@ public class EmployeeRepositoryTest
         var result = await _repository.GetEmployeeById(employeeId);
         
         Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task GetEmployeesByJobTitle_ReturnsEmployees_WhenFound()
+    {
+        _context.Employees.Add(_testEmployee);
+        await _context.SaveChangesAsync();
+
+        var result = await _repository.GetEmployeesByJobTitle("Graphic Designer");
+        
+        Assert.Single(result);
+        Assert.All(result, employee => Assert.Equal(_testEmployee.EmployeeId, employee.EmployeeId) );
+    }
+
+    [Fact]
+    public async Task GetEmployeesByJobTitle_ReturnsEmptyList_WhenNotFound()
+    {
+        _context.Employees.Add(_testEmployee);
+        await _context.SaveChangesAsync();
+        
+        var result = await _repository.GetEmployeesByJobTitle("Software Developer");
+        
+        Assert.Empty(result);
     }
 
     [Fact]

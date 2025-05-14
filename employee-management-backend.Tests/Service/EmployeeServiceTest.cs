@@ -34,6 +34,7 @@ public class EmployeeServiceTest
         IsAdmin = false,
         IsManager = false,
         IsActive = true,
+        JobTitle = "Graphic Designer",
     };
 
     [Fact]
@@ -49,15 +50,53 @@ public class EmployeeServiceTest
     public async Task GetEmployeeById_CallsRepository()
     {
         await _employeeService.GetEmployeeById(_testEmployee.EmployeeId);
-        
+
         _mockRepository.Verify(repo => repo.GetEmployeeById(_testEmployee.EmployeeId));
+    }
+
+    [Fact]
+    public async Task GetEmployeesByJobTitle_CapitalisesTitleAndReturnsResults()
+    {
+        const string inputTitle = "graphic designer";
+        const string expectedTitle = "Graphic Designer";
+
+        var expectedEmployees = new List<Employee>
+        {
+            _testEmployee,
+        };
+
+        _mockRepository.Setup(repo => repo.GetEmployeesByJobTitle(expectedTitle)).ReturnsAsync(expectedEmployees);
+
+        var result = await _employeeService.GetEmployeesByJobTitle(inputTitle);
+
+        Assert.NotNull(result);
+        Assert.Single(result);
+        Assert.Equal(expectedTitle, result.First().JobTitle);
+
+        _mockRepository.Verify(repo => repo.GetEmployeesByJobTitle(expectedTitle), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetEmployeesByJobTitle_WithCapitalisedInput_CallsRepositoryCorrectly()
+    {
+        const string inputTitle = "Software Developer";
+
+        var expectedEmployees = new List<Employee>();
+
+        _mockRepository.Setup(repo => repo.GetEmployeesByJobTitle(inputTitle)).ReturnsAsync(expectedEmployees);
+        
+        var result = await _employeeService.GetEmployeesByJobTitle(inputTitle);
+        
+        Assert.Empty(result);
+        
+        _mockRepository.Verify(repo => repo.GetEmployeesByJobTitle(inputTitle), Times.Once);
     }
 
     [Fact]
     public async Task CheckClockIdExists_CallsRepository()
     {
         await _employeeService.CheckClockIdExists(_testEmployee.ClockId);
-        
+
         _mockRepository.Verify(repo => repo.CheckClockIdExists(_testEmployee.ClockId));
     }
 }

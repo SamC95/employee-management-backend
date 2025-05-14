@@ -29,7 +29,7 @@ public class EmployeeController(IEmployeeService employeeService) : ControllerBa
         }
     }
 
-    [HttpGet("{employeeId}")]
+    [HttpGet("id/{employeeId}")]
     public async Task<IActionResult> GetEmployeeById(string employeeId)
     {
         try
@@ -41,6 +41,21 @@ public class EmployeeController(IEmployeeService employeeService) : ControllerBa
         catch (Exception ex)
         {
             Console.WriteLine($"Error retrieving employee data for id {employeeId}: {ex.Message}");
+            return StatusCode(500, new { message = $"An unexpected error occurred: {ex.Message}" });
+        }
+    }
+
+    [HttpGet("{jobTitle}")]
+    public async Task<IActionResult> GetEmployeesByJobTitle(string jobTitle)
+    {
+        try
+        {
+            var employees = await employeeService.GetEmployeesByJobTitle(jobTitle);
+
+            return Ok(employees);
+        }
+        catch (Exception ex)
+        {
             return StatusCode(500, new { message = $"An unexpected error occurred: {ex.Message}" });
         }
     }
