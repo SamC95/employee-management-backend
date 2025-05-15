@@ -29,6 +29,24 @@ public class EmployeeController(IEmployeeService employeeService) : ControllerBa
         }
     }
 
+    [HttpPost("update/{employeeId}")]
+    public async Task<IActionResult> UpdateEmployeeDetails(string employeeId, [FromBody] EmployeeUpdater patch)
+    {
+        if (employeeId != patch.EmployeeId)
+        {
+            return BadRequest(new { message = "The employee ID must match the ID in the body" });
+        }
+        
+        var result = await employeeService.UpdateEmployeeDetails(patch);
+
+        if (!result)
+        {
+            return NotFound(new { message = "The employee was not found" });
+        }
+        
+        return Ok(new { message = "Employee updated successfully" });
+    }
+
     [HttpGet("id/{employeeId}")]
     public async Task<IActionResult> GetEmployeeById(string employeeId)
     {

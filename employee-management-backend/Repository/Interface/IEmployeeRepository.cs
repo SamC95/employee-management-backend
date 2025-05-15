@@ -6,6 +6,8 @@ public interface IEmployeeRepository
 {
     Task CreateEmployee(Employee employee);
     
+    Task UpdateEmployeeDetails(Employee employee);
+    
     Task<Employee?> GetEmployeeById(string employeeId);
     
     Task<List<Employee>> GetEmployeesByJobTitle(string jobTitle);

@@ -22,6 +22,12 @@ public class EmployeeRepository(EmployeeDbContext context) : IEmployeeRepository
         }
     }
 
+    public async Task UpdateEmployeeDetails(Employee employee)
+    {
+        context.Employees.Update(employee);
+        await context.SaveChangesAsync();
+    }
+
     public async Task<Employee?> GetEmployeeById(string employeeId)
     {
         return await context.Employees

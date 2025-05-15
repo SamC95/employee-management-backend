@@ -47,6 +47,38 @@ public class EmployeeServiceTest
     }
 
     [Fact]
+    public async Task UpdateEmployeeDetails_ExistingEmployee_UpdatesFieldsAndReturnsTrue()
+    {
+        var existingEmployee = _testEmployee;
+        var patch = new EmployeeUpdater { EmployeeId = existingEmployee.EmployeeId, FirstName = "Jane" };
+
+        _mockRepository.Setup(request => request.GetEmployeeById(existingEmployee.EmployeeId))
+            .ReturnsAsync(existingEmployee);
+        _mockRepository.Setup(request => request.UpdateEmployeeDetails(It.IsAny<Employee>()))
+            .Returns(Task.CompletedTask)
+            .Verifiable();
+
+        var result = await _employeeService.UpdateEmployeeDetails(patch);
+
+        Assert.True(result);
+        Assert.Equal("Jane", existingEmployee.FirstName);
+        _mockRepository.Verify(request => request.UpdateEmployeeDetails(It.IsAny<Employee>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task UpdateEmployeeDetails_EmployeeNotFound_ReturnsFalse()
+    {
+        var patch = new EmployeeUpdater { EmployeeId = "9999999", FirstName = "Bobby" };
+        _mockRepository.Setup(request => request.GetEmployeeById("9999999"))
+            .ReturnsAsync((Employee?)null);
+        
+        var result = await _employeeService.UpdateEmployeeDetails(patch);
+        
+        Assert.False(result);
+        _mockRepository.Verify(request => request.UpdateEmployeeDetails(It.IsAny<Employee>()), Times.Never);
+    }
+
+    [Fact]
     public async Task GetEmployeeById_CallsRepository()
     {
         await _employeeService.GetEmployeeById(_testEmployee.EmployeeId);
@@ -84,11 +116,11 @@ public class EmployeeServiceTest
         var expectedEmployees = new List<Employee>();
 
         _mockRepository.Setup(repo => repo.GetEmployeesByJobTitle(inputTitle)).ReturnsAsync(expectedEmployees);
-        
+
         var result = await _employeeService.GetEmployeesByJobTitle(inputTitle);
-        
+
         Assert.Empty(result);
-        
+
         _mockRepository.Verify(repo => repo.GetEmployeesByJobTitle(inputTitle), Times.Once);
     }
 

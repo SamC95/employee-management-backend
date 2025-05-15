@@ -6,6 +6,8 @@ public interface IEmployeeService
 {
     Task CreateEmployee(Employee employee);
     
+    Task<bool> UpdateEmployeeDetails(EmployeeUpdater patch);
+    
     Task<Employee?> GetEmployeeById(string employeeId);
     
     Task<List<Employee>> GetEmployeesByJobTitle(string jobTitle);
