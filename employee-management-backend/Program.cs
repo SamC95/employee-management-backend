@@ -1,6 +1,7 @@
 using employee_management_backend.Database;
 using employee_management_backend.Model;
 using employee_management_backend.Repository;
+using employee_management_backend.Repository.Database;
 using employee_management_backend.Repository.Interface;
 using employee_management_backend.Service;
 using employee_management_backend.Service.Interface;
@@ -12,8 +13,10 @@ builder.Configuration.AddJsonFile("secrets.json", optional: true, reloadOnChange
 
 builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IShiftService, ShiftService>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
 
 var dbSettingsSection = builder.Configuration.GetSection("DatabaseSettings");
 builder.Services.Configure<DatabaseSettings>(dbSettingsSection);
@@ -30,6 +33,8 @@ var connectionString =
 builder.Services.AddDbContext<AttendanceDbContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddDbContext<EmployeeDbContext>(options =>
+    options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<ShiftDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddHttpClient();

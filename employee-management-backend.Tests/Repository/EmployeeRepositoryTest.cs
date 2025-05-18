@@ -1,6 +1,6 @@
-﻿using employee_management_backend.Database;
-using employee_management_backend.Model;
+﻿using employee_management_backend.Model;
 using employee_management_backend.Repository;
+using employee_management_backend.Repository.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace employee_management_backend.Tests.Repository;

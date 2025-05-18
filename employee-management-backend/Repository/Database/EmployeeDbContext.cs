@@ -1,7 +1,7 @@
 ﻿using employee_management_backend.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace employee_management_backend.Database;
+namespace employee_management_backend.Repository.Database;
 
 public class EmployeeDbContext(DbContextOptions<EmployeeDbContext> options) : DbContext(options)
 {

@@ -1,5 +1,5 @@
-﻿using employee_management_backend.Database;
-using employee_management_backend.Model;
+﻿using employee_management_backend.Model;
+using employee_management_backend.Repository.Database;
 using employee_management_backend.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 
