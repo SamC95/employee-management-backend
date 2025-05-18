@@ -18,6 +18,10 @@ public class ShiftController(IShiftService shiftService) : ControllerBase
 
             return Ok(new { message = $"Shift successfully added for {shift.EmployeeId}" });
         }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
         catch (Exception ex)
         {
             return StatusCode(500, new { message = $"An unexpected error occurred: {ex.Message}" });
