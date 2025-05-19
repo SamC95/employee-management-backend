@@ -17,4 +17,14 @@ public class ShiftService(IShiftRepository shiftRepository, IEmployeeRepository 
         
         await shiftRepository.AddWorkShift(shift);
     }
+
+    public async Task<bool> UpdateWorkShift(WorkShift shift)
+    {
+        return await shiftRepository.UpdateWorkShift(shift);
+    }
+
+    public async Task<WorkShift?> GetShiftById(Guid shiftId)
+    {
+        return await shiftRepository.GetShiftById(shiftId);
+    }
 }

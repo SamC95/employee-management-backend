@@ -8,7 +8,7 @@ public interface IEmployeeRepository
     
     Task UpdateEmployeeDetails(Employee employee);
     
-    Task<Employee?> GetEmployeeById(string employeeId);
+    Task<Employee?> GetEmployeeById(string? employeeId);
     
     Task<List<Employee>> GetEmployeesByJobTitle(string jobTitle);
     

@@ -28,7 +28,7 @@ public class EmployeeRepository(EmployeeDbContext context) : IEmployeeRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task<Employee?> GetEmployeeById(string employeeId)
+    public async Task<Employee?> GetEmployeeById(string? employeeId)
     {
         return await context.Employees
             .FirstOrDefaultAsync(employee => employee.EmployeeId == employeeId);

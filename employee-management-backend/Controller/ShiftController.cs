@@ -27,4 +27,38 @@ public class ShiftController(IShiftService shiftService) : ControllerBase
             return StatusCode(500, new { message = $"An unexpected error occurred: {ex.Message}" });
         }
     }
+
+    [HttpPost("update/{shiftId}")]
+    public async Task<IActionResult> AmendWorkShift(Guid shiftId, [FromBody] WorkShift shift)
+    {
+        if (shiftId != shift.ShiftId)
+        {
+            return BadRequest(new { message = "The shift ID must match the ID in the body"});
+        }
+
+        var result = await shiftService.UpdateWorkShift(shift);
+
+        if (!result)
+        {
+            return NotFound(new { message = "The shift was not found" });
+        }
+        
+        return Ok(new { message = "Shift updated successfully" });
+    }
+
+    [HttpPost("id/{shiftId:guid}")]
+    public async Task<IActionResult> GetShiftById(Guid shiftId)
+    {
+        try
+        {
+            var shift = await shiftService.GetShiftById(shiftId);
+
+            return shift == null ? NotFound(new { message = "Shift not found" }) : Ok(shift);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error retrieving shift data for id: {shiftId}: {ex.Message}");
+            return StatusCode(500, new { message = $"An unexpected error occurred: {ex.Message}" });
+        }
+    }
 }
