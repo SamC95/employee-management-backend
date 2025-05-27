@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace employee_management_backend.Controller;
 
 [ApiController]
-[Route("api/attendance")]
+[Route("api/attendance/clock")]
 public class AttendanceController(IAttendanceService attendanceService) : ControllerBase
 {
-    [HttpPost("clock")]
+    [HttpPost("")]
     public async Task<IActionResult> PostClockEvent([FromBody] ClockEvent clockEvent)
     {
         if (clockEvent.ClockId == "")
@@ -29,7 +29,7 @@ public class AttendanceController(IAttendanceService attendanceService) : Contro
         }
     }
 
-    [HttpGet("clock/{clockId}")]
+    [HttpGet("{clockId}")]
     public async Task<IActionResult> GetClockEventsByClockId(string clockId)
     {
         try

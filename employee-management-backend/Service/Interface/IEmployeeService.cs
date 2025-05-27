@@ -8,6 +8,8 @@ public interface IEmployeeService
     
     Task<bool> UpdateEmployeeDetails(EmployeeUpdater patch);
     
+    Task DeleteEmployee(string employeeId);
+    
     Task<Employee?> GetEmployeeById(string employeeId);
     
     Task<List<Employee>> GetEmployeesByJobTitle(string jobTitle);

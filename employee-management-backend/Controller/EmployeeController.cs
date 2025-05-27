@@ -47,6 +47,19 @@ public class EmployeeController(IEmployeeService employeeService) : ControllerBa
         return Ok(new { message = "Employee updated successfully" });
     }
 
+    [HttpPost("delete/{employeeId}")]
+    public async Task<IActionResult> DeleteEmployee(string employeeId)
+    {
+        if (employeeId is null or "")
+        {
+            return BadRequest(new { message = "The employee ID is required" });
+        }
+        
+        await employeeService.DeleteEmployee(employeeId);
+        
+        return Ok(new { message = "Employee deleted successfully" });
+    }
+
     [HttpGet("id/{employeeId}")]
     public async Task<IActionResult> GetEmployeeById(string employeeId)
     {
