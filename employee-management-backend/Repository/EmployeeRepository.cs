@@ -28,15 +28,16 @@ public class EmployeeRepository(EmployeeDbContext context) : IEmployeeRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task DeleteEmployee(string employeeId)
+    public async Task<bool> DeleteEmployee(string employeeId)
     {
         var employee = await context.Employees.FindAsync(employeeId);
 
-        if (employee != null)
-        {
-            context.Employees.Remove(employee);
-            await context.SaveChangesAsync();
-        }
+        if (employee == null) return false;
+        
+        context.Employees.Remove(employee);
+        await context.SaveChangesAsync();
+
+        return true;
     }
 
     public async Task<Employee?> GetEmployeeById(string? employeeId)

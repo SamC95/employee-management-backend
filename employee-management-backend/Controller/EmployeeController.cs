@@ -55,7 +55,12 @@ public class EmployeeController(IEmployeeService employeeService) : ControllerBa
             return BadRequest(new { message = "The employee ID is required" });
         }
         
-        await employeeService.DeleteEmployee(employeeId);
+        var deleted = await employeeService.DeleteEmployee(employeeId);
+
+        if (!deleted)
+        {
+            return NotFound(new { message = "An employee was not found by this ID" });
+        }
         
         return Ok(new { message = "Employee deleted successfully" });
     }

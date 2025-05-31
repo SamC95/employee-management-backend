@@ -38,9 +38,9 @@ public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployee
         return true;
     }
 
-    public async Task DeleteEmployee(string employeeId)
+    public async Task<bool> DeleteEmployee(string employeeId)
     {
-        await employeeRepository.DeleteEmployee(employeeId);
+        return await employeeRepository.DeleteEmployee(employeeId);
     }
 
     public async Task<Employee?> GetEmployeeById(string employeeId)
