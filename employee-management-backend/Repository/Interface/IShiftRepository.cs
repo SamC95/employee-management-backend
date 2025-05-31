@@ -8,5 +8,7 @@ public interface IShiftRepository
     
     Task<bool> UpdateWorkShift(WorkShift shift);
     
+    Task<bool> DeleteWorkShift(Guid shiftId);
+    
     Task<WorkShift?> GetShiftById(Guid shiftId);
 }

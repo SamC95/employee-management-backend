@@ -39,6 +39,18 @@ public class ShiftRepository(ShiftDbContext context) : IShiftRepository
         return Task.FromResult(true);
     }
 
+    public async Task<bool> DeleteWorkShift(Guid shiftId)
+    {
+        var shift = await context.Shifts.FindAsync(shiftId);
+
+        if (shift == null) return false;
+        
+        context.Shifts.Remove(shift);
+        await context.SaveChangesAsync();
+
+        return true;
+    }
+
     public async Task<WorkShift?> GetShiftById(Guid shiftId)
     {
         return await context.Shifts.FirstOrDefaultAsync(shift => shift.ShiftId == shiftId);

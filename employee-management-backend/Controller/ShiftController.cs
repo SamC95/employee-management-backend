@@ -46,6 +46,24 @@ public class ShiftController(IShiftService shiftService) : ControllerBase
         return Ok(new { message = "Shift updated successfully" });
     }
 
+    [HttpPost("delete/{shiftId}")]
+    public async Task<IActionResult> DeleteWorkShift(string shiftId)
+    {
+        if (!Guid.TryParse(shiftId, out var parsedShiftId))
+        {
+            return BadRequest(new { message = "Invalid shift ID format." });
+        }
+        
+        var deleted = await shiftService.DeleteWorkShift(parsedShiftId);
+
+        if (!deleted)
+        {
+            return NotFound(new { message = "No shift found by this shift ID" });
+        }
+        
+        return Ok(new { message = "Shift deleted successfully" });
+    }
+
     [HttpPost("id/{shiftId:guid}")]
     public async Task<IActionResult> GetShiftById(Guid shiftId)
     {

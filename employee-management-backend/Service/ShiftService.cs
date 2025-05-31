@@ -23,6 +23,11 @@ public class ShiftService(IShiftRepository shiftRepository, IEmployeeRepository 
         return await shiftRepository.UpdateWorkShift(shift);
     }
 
+    public async Task<bool> DeleteWorkShift(Guid shiftId)
+    {
+        return await shiftRepository.DeleteWorkShift(shiftId);
+    }
+    
     public async Task<WorkShift?> GetShiftById(Guid shiftId)
     {
         return await shiftRepository.GetShiftById(shiftId);
