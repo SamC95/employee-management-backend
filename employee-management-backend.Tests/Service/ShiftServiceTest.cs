@@ -54,9 +54,10 @@ public class ShiftServiceTest
     [Fact]
     public async Task AddWorkShift_AddsShift_WhenEmployeeExists()
     {
-        _mockEmployeeRepository
-            .Setup(repo => repo.GetEmployeeById(_testShift.EmployeeId))
-            .ReturnsAsync(CreateTestEmployee(_testShift.EmployeeId));
+        if (_testShift.EmployeeId != null)
+            _mockEmployeeRepository
+                .Setup(repo => repo.GetEmployeeById(_testShift.EmployeeId))
+                .ReturnsAsync(CreateTestEmployee(_testShift.EmployeeId));
 
         await _service.AddWorkShift(_testShift);
         
@@ -73,5 +74,27 @@ public class ShiftServiceTest
         await Assert.ThrowsAsync<ArgumentException>(() => _service.AddWorkShift(_testShift));
         
         _mockShiftRepository.Verify(repo => repo.AddWorkShift(_testShift), Times.Never);
+    }
+
+    [Fact]
+    public async Task UpdateWorkShift_WhenRepositoryReturnsTrue_ReturnsTrue()
+    {
+        _mockShiftRepository.Setup(repo => repo.UpdateWorkShift(_testShift)).ReturnsAsync(true);
+        
+        var result = await _service.UpdateWorkShift(_testShift);
+        
+        Assert.True(result);
+        _mockShiftRepository.Verify(repo => repo.UpdateWorkShift(_testShift), Times.Once);
+    }
+
+    [Fact]
+    public async Task UpdateWorkShift_WhenRepositoryReturnsFalse_ReturnsFalse()
+    {
+        _mockShiftRepository.Setup(repo => repo.UpdateWorkShift(_testShift)).ReturnsAsync(false);
+        
+        var result = await _service.UpdateWorkShift(_testShift);
+        
+        Assert.False(result);
+        _mockShiftRepository.Verify(repo => repo.UpdateWorkShift(_testShift), Times.Once);
     }
 }

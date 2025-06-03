@@ -44,4 +44,27 @@ public class ShiftRepositoryTest
         Assert.Equal(_testShift.StartTime, savedShift.StartTime);
         Assert.Equal(_testShift.EndTime, savedShift.EndTime);
     }
+
+    [Fact]
+    public async Task UpdateWorkShift_WhenShiftExists_UpdatesAndReturnsTrue()
+    {
+        _context.Shifts.Add(_testShift);
+        await _context.SaveChangesAsync();
+        
+        var result = await _repository.UpdateWorkShift(_testShift);
+        
+        Assert.True(result);
+        
+        var updated = await _context.Shifts.FindAsync(_testShift.ShiftId);
+        Assert.Equal(new DateOnly(2018, 5, 5), updated?.Date);
+        Assert.Equal(_testShift.StartTime, updated?.StartTime);
+    }
+
+    [Fact]
+    public async Task UpdateWorkShift_WhenShiftDoesNotExist_ThrowsException()
+    {
+        var exception = await Assert.ThrowsAsync<Exception>(async () => await _repository.UpdateWorkShift(_testShift));
+        
+        Assert.Contains("was not found", exception.Message);
+    }
 }
