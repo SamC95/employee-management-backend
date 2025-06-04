@@ -94,4 +94,50 @@ public class ShiftControllerTest
         
         _mockService.Verify(service => service.UpdateWorkShift(_testShift), Times.Once());
     }
+
+    [Fact]
+    public async Task DeleteWorkShift_WhenShiftIdIsInvalid_ReturnsBadRequest()
+    {
+        const string invalidId = "guid";
+
+        var result = await _controller.DeleteWorkShift(invalidId);
+        
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(400, badRequestResult.StatusCode);
+        Assert.NotNull(badRequestResult.Value);
+        
+        _mockService.Verify(service => service.DeleteWorkShift(It.IsAny<Guid>()), Times.Never());
+    }
+
+    [Fact]
+    public async Task DeleteWorkShift_WhenShiftDoesNotExist_ReturnsNotFound()
+    {
+        var shiftId = Guid.NewGuid();
+        
+        _mockService.Setup(service => service.DeleteWorkShift(shiftId)).ReturnsAsync(false);
+        
+        var result = await _controller.DeleteWorkShift(shiftId.ToString());
+        
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal(404, notFoundResult.StatusCode);
+        Assert.NotNull(notFoundResult.Value);
+        
+        _mockService.Verify(service => service.DeleteWorkShift(shiftId), Times.Once());
+    }
+
+    [Fact]
+    public async Task DeleteWorkShift_WhenSuccessful_ReturnsOk()
+    {
+        var shiftId = Guid.NewGuid();
+        
+        _mockService.Setup(service => service.DeleteWorkShift(shiftId)).ReturnsAsync(true);
+        
+        var result = await _controller.DeleteWorkShift(shiftId.ToString());
+        
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(200, okResult.StatusCode);
+        Assert.NotNull(okResult.Value);
+        
+        _mockService.Verify(service => service.DeleteWorkShift(shiftId), Times.Once());
+    }
 }

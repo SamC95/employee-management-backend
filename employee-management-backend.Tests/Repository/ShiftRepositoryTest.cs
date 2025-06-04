@@ -67,4 +67,28 @@ public class ShiftRepositoryTest
         
         Assert.Contains("was not found", exception.Message);
     }
+
+    [Fact]
+    public async Task DeleteWorkShift_WhenShiftExists_RemovesShiftAndReturnsTrue()
+    {
+        _context.Shifts.Add(_testShift);
+        await _context.SaveChangesAsync();
+        
+        var shiftId = _testShift.ShiftId;
+        
+        var result = await _repository.DeleteWorkShift(shiftId);
+        
+        Assert.True(result);
+        var deletedShift = await _context.Shifts.FindAsync(shiftId);
+        
+        Assert.Null(deletedShift);
+    }
+
+    [Fact]
+    public async Task DeleteWorkShift_WhenShiftDoesNotExist_ReturnsFalse()
+    {
+        var result = await _repository.DeleteWorkShift(Guid.NewGuid());
+        
+        Assert.False(result);
+    }
 }

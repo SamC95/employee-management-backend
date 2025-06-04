@@ -97,4 +97,26 @@ public class ShiftServiceTest
         Assert.False(result);
         _mockShiftRepository.Verify(repo => repo.UpdateWorkShift(_testShift), Times.Once);
     }
+
+    [Fact]
+    public async Task DeleteWorkShift_WhenRepositoryReturnsTrue_ReturnsTrue()
+    {
+        _mockShiftRepository.Setup(repo => repo.DeleteWorkShift(_testShift.ShiftId)).ReturnsAsync(true);
+        
+        var result = await _service.DeleteWorkShift(_testShift.ShiftId);
+        
+        Assert.True(result);
+        _mockShiftRepository.Verify(repo => repo.DeleteWorkShift(_testShift.ShiftId), Times.Once);
+    }
+
+    [Fact]
+    public async Task DeleteWorkShift_WhenRepositoryReturnsFalse_ReturnsFalse()
+    {
+        _mockShiftRepository.Setup(repo => repo.DeleteWorkShift(_testShift.ShiftId)).ReturnsAsync(false);
+        
+        var result = await _service.DeleteWorkShift(_testShift.ShiftId);
+        
+        Assert.False(result);
+        _mockShiftRepository.Verify(repo => repo.DeleteWorkShift(_testShift.ShiftId), Times.Once);
+    }
 }
