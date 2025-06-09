@@ -30,7 +30,7 @@ public class ShiftRepositoryTest
     };
 
     [Fact]
-    public async Task AddWorkShift_Should_SuccessfullySaveShift()
+    public async Task AddWorkShift_ShouldSuccessfullySaveShift()
     {
         await _repository.AddWorkShift(_testShift);
 

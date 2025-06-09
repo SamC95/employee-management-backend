@@ -14,9 +14,11 @@ builder.Configuration.AddJsonFile("secrets.json", optional: true, reloadOnChange
 builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IShiftService, ShiftService>();
+builder.Services.AddScoped<IHolidayService, HolidayService>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
+builder.Services.AddScoped<IHolidayRepository, HolidayRepository>();
 
 var dbSettingsSection = builder.Configuration.GetSection("DatabaseSettings");
 builder.Services.Configure<DatabaseSettings>(dbSettingsSection);
@@ -35,6 +37,8 @@ builder.Services.AddDbContext<AttendanceDbContext>(options =>
 builder.Services.AddDbContext<EmployeeDbContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddDbContext<ShiftDbContext>(options =>
+    options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<HolidayDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddHttpClient();

@@ -41,7 +41,7 @@ public class ShiftServiceTest
             City = "City",
             PostCode = "00000",
             Country = "Country",
-            Gender = "Other",
+            Gender = "Test",
             DateOfBirth = new DateOnly(1990, 1, 1),
             DateHired = new DateOnly(2020, 1, 1),
             IsAdmin = false,
