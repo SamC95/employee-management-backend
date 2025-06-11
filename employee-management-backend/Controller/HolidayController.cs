@@ -13,9 +13,9 @@ public class HolidayController(IHolidayService holidayService) : ControllerBase
     {
         if (holidayRequest.Status is "" or null)
         {
-            return BadRequest(new { message = "Request is missing the status field"});
+            return BadRequest(new { message = "Request is missing the status field" });
         }
-        
+
         try
         {
             await holidayService.CreateHolidayRequest(holidayRequest);
@@ -30,5 +30,23 @@ public class HolidayController(IHolidayService holidayService) : ControllerBase
         {
             return StatusCode(500, new { message = $"An unexpected error occurred. {ex.Message}" });
         }
+    }
+
+    [HttpPost("update/status/{eventId:guid}")]
+    public async Task<IActionResult> UpdateHolidayStatus(Guid eventId, [FromBody] HolidayEvent holidayEvent)
+    {
+        if (eventId != holidayEvent.EventId)
+        {
+            return BadRequest(new { message = "The event ID must match the ID in the body" });
+        }
+
+        var result = await holidayService.UpdateHolidayStatus(holidayEvent);
+
+        if (!result)
+        {
+            return NotFound(new { message = "Holiday request by this event id could not be found." });
+        }
+
+        return Ok(new { message = "Holiday status updated successfully" });
     }
 }

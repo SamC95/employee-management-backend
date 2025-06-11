@@ -17,4 +17,9 @@ public class HolidayService(IHolidayRepository holidayRepository, IEmployeeRepos
         
         await holidayRepository.CreateHolidayRequest(holidayEvent);
     }
+
+    public async Task<bool> UpdateHolidayStatus(HolidayEvent holidayEvent)
+    {
+        return await holidayRepository.UpdateHolidayStatus(holidayEvent);
+    }
 }

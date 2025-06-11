@@ -19,4 +19,19 @@ public class HolidayRepository(HolidayDbContext context) : IHolidayRepository
             Console.WriteLine($"Error occurred adding holiday event to database: {ex.Message}");
         }
     }
+
+    public Task<bool> UpdateHolidayStatus(HolidayEvent holidayEvent)
+    {
+        var existingHolidayRequest = context.Holidays.Find(holidayEvent.EventId);
+
+        if (existingHolidayRequest == null)
+        {
+            throw new Exception($"Holiday event with id {holidayEvent.EventId} does not exist");
+        }
+        
+        if (holidayEvent.Status is not null) existingHolidayRequest.Status = holidayEvent.Status;
+
+        context.SaveChanges();
+        return Task.FromResult(true);
+    }
 }

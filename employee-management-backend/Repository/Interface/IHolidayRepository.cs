@@ -5,4 +5,6 @@ namespace employee_management_backend.Repository.Interface;
 public interface IHolidayRepository
 {
     Task CreateHolidayRequest(HolidayEvent holidayEvent);
+    
+    Task<bool> UpdateHolidayStatus(HolidayEvent holidayEvent);
 }
