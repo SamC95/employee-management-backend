@@ -33,7 +33,7 @@ public class HolidayControllerTest
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
         Assert.NotNull(okResult.Value);
-        Assert.Contains("Holiday request created", okResult.Value.ToString());
+        Assert.Contains("Holiday request created successfully", okResult.Value.ToString());
         
         _mockService.Verify(service => service.CreateHolidayRequest(_holidayEvent), Times.Once());
     }
@@ -78,5 +78,47 @@ public class HolidayControllerTest
         Assert.NotNull(badRequestResult.Value);
         
         _mockService.Verify(service => service.CreateHolidayRequest(_holidayEvent), Times.Never());
+    }
+
+    [Fact]
+    public async Task UpdateHolidayStatus_WhenEventIdDoesNotMatch_ReturnsBadRequest()
+    {
+        var eventId = Guid.NewGuid();
+        
+        var result = await _holidayController.UpdateHolidayStatus(eventId, _holidayEvent);
+        
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(400, badRequestResult.StatusCode);
+        Assert.NotNull(badRequestResult.Value);
+        
+        _mockService.Verify(service => service.UpdateHolidayStatus(It.IsAny<HolidayEvent>()), Times.Never());
+    }
+
+    [Fact]
+    public async Task UpdateHolidayStatus_WhenServiceReturnsFalse_ReturnsNotFound()
+    {
+        _mockService.Setup(service => service.UpdateHolidayStatus(_holidayEvent)).ReturnsAsync(false);
+        
+        var result = await _holidayController.UpdateHolidayStatus(_holidayEvent.EventId, _holidayEvent);
+        
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal(404, notFoundResult.StatusCode);
+        Assert.NotNull(notFoundResult);
+        
+        _mockService.Verify(service => service.UpdateHolidayStatus(_holidayEvent), Times.Once());
+    }
+
+    [Fact]
+    public async Task UpdateHolidayStatus_WhenServiceReturnsTrue_ReturnsOk()
+    {
+        _mockService.Setup(service => service.UpdateHolidayStatus(_holidayEvent)).ReturnsAsync(true);
+        
+        var result = await _holidayController.UpdateHolidayStatus(_holidayEvent.EventId, _holidayEvent);
+        
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(200, okResult.StatusCode);
+        Assert.NotNull(okResult.Value);
+        
+        _mockService.Verify(service => service.UpdateHolidayStatus(_holidayEvent), Times.Once());
     }
 }

@@ -42,4 +42,26 @@ public class HolidayRepositoryTest
         Assert.Equal(_holidayEvent.Status, savedShift.Status);
         Assert.Equal(_holidayEvent.EmployeeId, savedShift.EmployeeId);
     }
+
+    [Fact]
+    public async Task UpdateHolidayStatus_WhenHolidayExists_UpdatesAndReturnsTrue()
+    {
+        _context.Holidays.Add(_holidayEvent);
+        await _context.SaveChangesAsync();
+        
+        var result = await _repository.UpdateHolidayStatus(_holidayEvent);
+        
+        Assert.True(result);
+        
+        var updated = await _context.Holidays.FindAsync(_holidayEvent.EventId);
+        Assert.Equal(_holidayEvent.Status, updated?.Status);
+    }
+
+    [Fact]
+    public async Task UpdateHolidayStatus_WhenHolidayDoesNotExist_ThrowsException()
+    {
+        var exception = await Assert.ThrowsAsync<Exception>(async () => await _repository.UpdateHolidayStatus(_holidayEvent));
+        
+        Assert.Contains($"Holiday event with id {_holidayEvent.EventId} does not exist", exception.Message);
+    }
 }

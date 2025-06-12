@@ -72,4 +72,26 @@ public class HolidayServiceTest
         
         _mockHolidayRepository.Verify(repo => repo.CreateHolidayRequest(_holidayEvent), Times.Never);
     }
+
+    [Fact]
+    public async Task UpdateHolidayStatus_WhenRepositoryReturnsFalse_ReturnsFalse()
+    {
+        _mockHolidayRepository.Setup(repo => repo.UpdateHolidayStatus(_holidayEvent)).ReturnsAsync(false);
+        
+        var result = await _service.UpdateHolidayStatus(_holidayEvent);
+        
+        Assert.False(result);
+        _mockHolidayRepository.Verify(repo => repo.UpdateHolidayStatus(_holidayEvent), Times.Once);
+    }
+
+    [Fact]
+    public async Task UpdateHolidayStatus_WhenRepositoryReturnsTrue_ReturnsTrue()
+    {
+        _mockHolidayRepository.Setup(repo => repo.UpdateHolidayStatus(_holidayEvent)).ReturnsAsync(true);
+        
+        var result = await _service.UpdateHolidayStatus(_holidayEvent);
+        
+        Assert.True(result);
+        _mockHolidayRepository.Verify(repo => repo.UpdateHolidayStatus(_holidayEvent), Times.Once);
+    }
 }
