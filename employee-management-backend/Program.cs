@@ -5,6 +5,7 @@ using employee_management_backend.Repository.Database;
 using employee_management_backend.Repository.Interface;
 using employee_management_backend.Service;
 using employee_management_backend.Service.Interface;
+using employee_management_backend.Service.Utils;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,10 +16,14 @@ builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IShiftService, ShiftService>();
 builder.Services.AddScoped<IHolidayService, HolidayService>();
+builder.Services.AddScoped<IPayslipService, PayslipService>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
 builder.Services.AddScoped<IHolidayRepository, HolidayRepository>();
+builder.Services.AddScoped<IPayslipRepository, PayslipRepository>();
+
+builder.Services.AddSingleton<PayslipCalculator>();
 
 var dbSettingsSection = builder.Configuration.GetSection("DatabaseSettings");
 builder.Services.Configure<DatabaseSettings>(dbSettingsSection);
@@ -39,6 +44,8 @@ builder.Services.AddDbContext<EmployeeDbContext>(options =>
 builder.Services.AddDbContext<ShiftDbContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddDbContext<HolidayDbContext>(options =>
+    options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<PayslipDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddHttpClient();
