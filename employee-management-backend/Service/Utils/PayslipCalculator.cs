@@ -30,7 +30,7 @@ public class PayslipCalculator()
     }
 
     private static Dictionary<int, int> GetSickDaysByWeek(List<DateOnly> sickDates, DateOnly startDate,
-        int weeksInPayPeriod)
+        double weeksInPayPeriod)
     {
         var result = new Dictionary<int, int>();
 
@@ -44,13 +44,13 @@ public class PayslipCalculator()
         return result;
     }
 
-    private static int CalculateWeeksInPayPeriod(DateOnly startDate, DateOnly endDate)
+    private static double CalculateWeeksInPayPeriod(DateOnly startDate, DateOnly endDate)
     {
         if (endDate < startDate) 
             throw new ArgumentException("end date cannot be before the start date");
         
         var totalDays = endDate.DayNumber - startDate.DayNumber + 1;
-        var weeksInPeriod = (int)Math.Ceiling(totalDays / 7.0);
+        var weeksInPeriod = Math.Ceiling(totalDays / 7.0);
         
         return weeksInPeriod;
     }

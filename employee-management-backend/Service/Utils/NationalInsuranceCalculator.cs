@@ -7,7 +7,7 @@ public static class NationalInsuranceCalculator
     private const double UpperEarningsLimit = 967.00;
 
     // Calculates total National Insurance across multiple weeks accounting for different weekly pay and unpaid sick days.
-    public static double CalculateNationalInsurance(double grossPay, int weeksInPeriod,
+    public static double CalculateNationalInsurance(double grossPay, double weeksInPeriod,
         Dictionary<int, int> sickDaysByWeek, string category, int daysWorkedPerWeek)
     {
         if (daysWorkedPerWeek is <= 0 or > 7)
