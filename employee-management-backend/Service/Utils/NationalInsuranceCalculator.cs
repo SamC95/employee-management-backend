@@ -2,7 +2,7 @@
 
 public static class NationalInsuranceCalculator
 {
-    // Constants for 2024/25 weekly thresholds
+    // Constants for 2025/26 weekly thresholds
     private const double PrimaryThreshold = 242.00;
     private const double UpperEarningsLimit = 967.00;
 
