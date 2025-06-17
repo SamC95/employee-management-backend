@@ -3,33 +3,33 @@
 public static class TaxCalculator
 {
     // TODO - Only handles the most common UK tax codes for now, support for emergency tax codes and Scottish/Welsh tax codes to be added later
-    public static double CalculateTax(double grossPay, string taxCode, int periodsPerYear = 12)
+    public static decimal CalculateTax(decimal grossPay, string taxCode, int periodsPerYear = 12)
     {
         switch (taxCode)
         {
             case "1257L":
-                const double personalAllowance = 12570.0;
+                const decimal personalAllowance = 12570.0m;
                 var annualGrossPay = grossPay * periodsPerYear;
                 
                 var taxableIncome = Math.Max(0, annualGrossPay - personalAllowance);
 
-                var basicRate = Math.Min(taxableIncome, 50270 - personalAllowance) * 0.20;
+                var basicRate = Math.Min(taxableIncome, 50270 - personalAllowance) * 0.20m;
                 var higherRate =
-                    Math.Min(Math.Max(0, taxableIncome - (50270 - personalAllowance)), 125140 - 50270) * 0.40;
-                var additionalRate = Math.Max(0, taxableIncome - 125140 + personalAllowance) * 0.45;
+                    Math.Min(Math.Max(0, taxableIncome - (50270 - personalAllowance)), 125140 - 50270) * 0.40m;
+                var additionalRate = Math.Max(0, taxableIncome - 125140 + personalAllowance) * 0.45m;
 
                 var annualTax = basicRate + higherRate + additionalRate;
                 
                 return annualTax / periodsPerYear;
 
             case "BR":
-                return grossPay * 0.20;
+                return grossPay * 0.20m;
 
             case "D0":
-                return grossPay * 0.40;
+                return grossPay * 0.40m;
 
             case "D1":
-                return grossPay * 0.45;
+                return grossPay * 0.45m;
 
             case "NT":
                 return 0;

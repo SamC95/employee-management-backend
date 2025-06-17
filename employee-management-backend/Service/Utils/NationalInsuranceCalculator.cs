@@ -3,19 +3,19 @@
 public static class NationalInsuranceCalculator
 {
     // Constants for 2025/26 weekly thresholds
-    private const double PrimaryThreshold = 242.00;
-    private const double UpperEarningsLimit = 967.00;
+    private const decimal PrimaryThreshold = 242.00m;
+    private const decimal UpperEarningsLimit = 967.00m;
 
     // Calculates total National Insurance across multiple weeks accounting for different weekly pay and unpaid sick days.
-    public static double CalculateNationalInsurance(double grossPay, double weeksInPeriod,
+    public static decimal CalculateNationalInsurance(decimal grossPay, double weeksInPeriod,
         Dictionary<int, int> sickDaysByWeek, string category, int daysWorkedPerWeek)
     {
         if (daysWorkedPerWeek is <= 0 or > 7)
             throw new ArgumentException("Days worked per week must be between 1 and 7");
         
         category = category.ToUpperInvariant();
-        var weeklyGross = grossPay / weeksInPeriod;
-        double totalNationalInsurance = 0;
+        var weeklyGross = grossPay / (decimal)weeksInPeriod;
+        decimal totalNationalInsurance = 0;
 
         for (var week = 0; week < weeksInPeriod; week++)
         {
@@ -34,13 +34,13 @@ public static class NationalInsuranceCalculator
         return Math.Round(totalNationalInsurance, 2);
     }
 
-    private static double AdjustWeeklyPayForSickDays(double weeklyPay, int sickDays, int daysWorkedPerWeek)
+    private static decimal AdjustWeeklyPayForSickDays(decimal weeklyPay, int sickDays, int daysWorkedPerWeek)
     {
         var daysWorked = Math.Max(0, daysWorkedPerWeek - sickDays);
         return weeklyPay * daysWorked / daysWorkedPerWeek;
     }
 
-    private static double CalculateStandardNationalInsurance(double weeklyPay)
+    private static decimal CalculateStandardNationalInsurance(decimal weeklyPay)
     {
         if (weeklyPay <= PrimaryThreshold)
             return 0;
@@ -48,15 +48,15 @@ public static class NationalInsuranceCalculator
         var basicBand = Math.Min(weeklyPay, UpperEarningsLimit) - PrimaryThreshold;
         var upperBand = Math.Max(0, weeklyPay - UpperEarningsLimit);
 
-        return Math.Round(basicBand * 0.08 + upperBand * 0.02, 2);
+        return Math.Round(basicBand * 0.08m + upperBand * 0.02m, 2);
     }
 
-    private static double CalculateDeferredNationalInsurance(double weeklyPay)
+    private static decimal CalculateDeferredNationalInsurance(decimal weeklyPay)
     {
         if (weeklyPay <= UpperEarningsLimit)
             return 0;
 
         var upperBand = weeklyPay - UpperEarningsLimit;
-        return Math.Round(upperBand * 0.02, 2);
+        return Math.Round(upperBand * 0.02m, 2);
     }
 }

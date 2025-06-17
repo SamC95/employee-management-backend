@@ -26,33 +26,33 @@ public class Payslip
     
     public required string TaxCode { get; set; }
     
-    public required double HoursWorked { get; set; }
+    public required decimal HoursWorked { get; set; }
     
-    public required double HolidayHours { get; set; }
+    public required decimal HolidayHours { get; set; }
     
     public required bool HasPension { get; set; }
     
     public required bool HasUnion  { get; set; }
     
-    public double TaxAmountPaid { get; set; }
+    public decimal TaxAmountPaid { get; set; }
     
-    public double EmployeePensionAmountPaid { get; set; }
+    public decimal EmployeePensionAmountPaid { get; set; }
     
-    public double EmployerPensionAmountPaid { get; set; }
+    public decimal EmployerPensionAmountPaid { get; set; }
     
-    public required double PensionContributionPercentage { get; set; }
+    public required decimal PensionContributionPercentage { get; set; }
     
-    public double EmployeeUnionAmountPaid { get; set; }
+    public decimal EmployeeUnionAmountPaid { get; set; }
     
-    public required double UnionContributionPercentage { get; set; }
+    public required decimal UnionContributionPercentage { get; set; }
     
-    public double NationalInsuranceAmountPaid { get; set; }
+    public decimal NationalInsuranceAmountPaid { get; set; }
     
-    public required double PayPerHour { get; set; }
+    public required decimal PayPerHour { get; set; }
     
-    public double GrossPay { get; set; }
+    public decimal GrossPay { get; set; }
     
-    public double NetPay { get; set; }
+    public decimal NetPay { get; set; }
 
     public List<DateOnly> SickDates { get; set; } = [];
 }

@@ -23,4 +23,6 @@ public class Employee
     public required bool IsManager { get; set; }
     public required bool IsActive { get; set; }
     public required string JobTitle { get; set; }
+    
+    // TODO - Employee model needs to be updated to include extra details. (Password, NI Number, Pension/Union status, etc)
 }

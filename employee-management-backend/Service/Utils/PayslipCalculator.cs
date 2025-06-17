@@ -9,13 +9,13 @@ public class PayslipCalculator()
         payslip.GrossPay = (payslip.HoursWorked + payslip.HolidayHours) * payslip.PayPerHour;
 
         payslip.EmployeePensionAmountPaid =
-            payslip.HasPension ? payslip.GrossPay * (payslip.PensionContributionPercentage / 100.0) : 0;
+            payslip.HasPension ? payslip.GrossPay * (payslip.PensionContributionPercentage / 100.0m) : 0m;
 
         payslip.EmployerPensionAmountPaid =
-            payslip.HasPension ? payslip.GrossPay * (payslip.PensionContributionPercentage / 100.0) : 0;
+            payslip.HasPension ? payslip.GrossPay * (payslip.PensionContributionPercentage / 100.0m) : 0m;
 
         payslip.EmployeeUnionAmountPaid =
-            payslip.HasUnion ? payslip.GrossPay * (payslip.UnionContributionPercentage / 100.0) : 0;
+            payslip.HasUnion ? payslip.GrossPay * (payslip.UnionContributionPercentage / 100.0m) : 0m;
 
         payslip.TaxAmountPaid = TaxCalculator.CalculateTax(payslip.GrossPay, payslip.TaxCode);
 
