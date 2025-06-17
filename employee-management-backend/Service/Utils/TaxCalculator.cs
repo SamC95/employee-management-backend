@@ -9,17 +9,23 @@ public static class TaxCalculator
         {
             case "1257L":
                 const decimal personalAllowance = 12570.0m;
+                const decimal basicRateUpper = 50270m;
+                const decimal higherRateUpper = 125140m;
+
                 var annualGrossPay = grossPay * periodsPerYear;
-                
+
                 var taxableIncome = Math.Max(0, annualGrossPay - personalAllowance);
 
-                var basicRate = Math.Min(taxableIncome, 50270 - personalAllowance) * 0.20m;
+                var basicRate = Math.Min(taxableIncome, basicRateUpper - personalAllowance) * 0.20m;
+                
                 var higherRate =
-                    Math.Min(Math.Max(0, taxableIncome - (50270 - personalAllowance)), 125140 - 50270) * 0.40m;
-                var additionalRate = Math.Max(0, taxableIncome - 125140 + personalAllowance) * 0.45m;
+                    Math.Min(Math.Max(0, taxableIncome - (basicRateUpper - personalAllowance)),
+                        higherRateUpper - basicRateUpper) * 0.40m;
+                
+                var additionalRate = Math.Max(0, taxableIncome - (higherRateUpper - personalAllowance)) * 0.45m;
 
                 var annualTax = basicRate + higherRate + additionalRate;
-                
+
                 return annualTax / periodsPerYear;
 
             case "BR":
