@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace employee_management_backend.Controller;
 
 [ApiController]
-[Route("api/attendance/clock")]
+[Route("api/v1/attendance/clock")]
 public class AttendanceController(IAttendanceService attendanceService) : ControllerBase
 {
     [HttpPost("")]

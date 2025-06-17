@@ -1,10 +1,10 @@
 ﻿// GetEmployeeById
-http://localhost:5000/api/employee/id/77932819
+http://localhost:5000/api/v1/employee/id/77932819
 
 ###
 // GetEmployeesByJobTitle
-http://localhost:5000/api/employee/assistant manager
+http://localhost:5000/api/v1/employee/assistant manager
 
 ###
 // CheckClockIdExists
-http://localhost:5000/api/employee/clock/297351
+http://localhost:5000/api/v1/employee/clock/297351

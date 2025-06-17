@@ -7,7 +7,7 @@ using Npgsql;
 namespace employee_management_backend.Controller;
 
 [ApiController]
-[Route("api/employee")]
+[Route("api/v1/employee")]
 public class EmployeeController(IEmployeeService employeeService) : ControllerBase
 {
     [HttpPost("create")]

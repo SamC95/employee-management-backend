@@ -6,7 +6,7 @@ namespace employee_management_backend.Controller;
 
 
 [ApiController]
-[Route("api/shift")]
+[Route("api/v1/shift")]
 public class ShiftController(IShiftService shiftService) : ControllerBase
 {
     [HttpPost("add")]

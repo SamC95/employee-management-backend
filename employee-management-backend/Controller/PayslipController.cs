@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace employee_management_backend.Controller;
 
 [ApiController]
-[Route("api/pay")]
+[Route("api/v1/payslip")]
 public class PayslipController(IPayslipService payslipService) : ControllerBase
 {
     [HttpPost("create")]

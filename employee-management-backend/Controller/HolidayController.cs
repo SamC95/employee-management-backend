@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace employee_management_backend.Controller;
 
 [ApiController]
-[Route("api/holiday")]
+[Route("api/v1/holiday")]
 public class HolidayController(IHolidayService holidayService) : ControllerBase
 {
     [HttpPost("create")]
