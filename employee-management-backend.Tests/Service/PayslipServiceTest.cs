@@ -120,7 +120,7 @@ public class PayslipServiceTest
     }
 
     [Fact]
-    public async Task CreatePayslip_WhenPensionContributionIsPositiveButHasPensionFalse_ThrowsArgumentException()
+    public async Task CreatePayslip_WhenEmployeePensionContributionIsPositiveButHasPensionFalse_ThrowsArgumentException()
     {
         _mockEmployeeRepository.Setup(repo => repo.GetEmployeeById(_testPayslip.EmployeeId))
             .ReturnsAsync(_testEmployee);
@@ -128,7 +128,19 @@ public class PayslipServiceTest
         _testEmployee.EmployeePensionContributionPercentage = 1.5m;
         
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => _service.CreatePayslip(_testPayslip));
-        Assert.Equal("Pension contribution percentage must be 0 if employee does not have a pension", exception.Message);
+        Assert.Equal("Employee pension contribution percentage must be 0 if employee does not have a pension", exception.Message);
+    }
+    
+    [Fact]
+    public async Task CreatePayslip_WhenEmployerPensionContributionIsPositiveButHasPensionFalse_ThrowsArgumentException()
+    {
+        _mockEmployeeRepository.Setup(repo => repo.GetEmployeeById(_testPayslip.EmployeeId))
+            .ReturnsAsync(_testEmployee);
+        _testEmployee.HasPension = false;
+        _testEmployee.EmployerPensionContributionPercentage = 3.0m;
+        
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => _service.CreatePayslip(_testPayslip));
+        Assert.Equal("Employer pension contribution percentage must be 0 if employee does not have a pension", exception.Message);
     }
 
     [Fact]
