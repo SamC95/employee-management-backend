@@ -21,21 +21,13 @@ public class PayslipControllerTest
     {
         EmployeeId = "7734021",
         EmployeeName = "Hassan Patel",
-        NationalInsuranceNumber = "QQ112233A",
-        NationalInsuranceCategory = "A",
         PayslipStartDate = new DateOnly(2025, 7, 1),
         PayslipEndDate = new DateOnly(2025, 7, 31),
         CompanyName = "Vertex Innovations Ltd",
         EmployeeDepartment = "Product Development",
         DaysWorkedPerWeek = 5,
-        TaxCode = "1257L",
         HoursWorked = 168,
         HolidayHours = 10,
-        HasPension = true,
-        HasUnion = false,
-        PensionContributionPercentage = 4,
-        UnionContributionPercentage = 0,
-        PayPerHour = 23.40m,
         SickDates = [new DateOnly(2025, 7, 11)]
     };
 

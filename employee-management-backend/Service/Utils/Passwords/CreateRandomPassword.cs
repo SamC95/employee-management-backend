@@ -1,4 +1,4 @@
-﻿namespace employee_management_backend.Service.Utils;
+﻿namespace employee_management_backend.Service.Utils.Passwords;
 
 public static class CreateRandomPassword
 {

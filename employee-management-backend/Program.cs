@@ -5,7 +5,7 @@ using employee_management_backend.Repository.Database;
 using employee_management_backend.Repository.Interface;
 using employee_management_backend.Service;
 using employee_management_backend.Service.Interface;
-using employee_management_backend.Service.Utils;
+using employee_management_backend.Service.Utils.Calculators;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

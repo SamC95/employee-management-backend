@@ -1,29 +1,29 @@
 ﻿using employee_management_backend.Model;
 
-namespace employee_management_backend.Service.Utils;
+namespace employee_management_backend.Service.Utils.Calculators;
 
 public class PayslipCalculator()
 {
-    public static void Calculate(Payslip payslip)
+    public static void Calculate(Payslip payslip, Employee employee)
     {
-        payslip.GrossPay = (payslip.HoursWorked + payslip.HolidayHours) * payslip.PayPerHour;
+        payslip.GrossPay = (payslip.HoursWorked + payslip.HolidayHours) * employee.PayPerHour;
 
         payslip.EmployeePensionAmountPaid =
-            payslip.HasPension ? payslip.GrossPay * (payslip.PensionContributionPercentage / 100.0m) : 0m;
+            employee.HasPension ? payslip.GrossPay * (employee.EmployeePensionContributionPercentage / 100.0m) : 0m;
 
         payslip.EmployerPensionAmountPaid =
-            payslip.HasPension ? payslip.GrossPay * (payslip.PensionContributionPercentage / 100.0m) : 0m;
+            employee.HasPension ? payslip.GrossPay * (employee.EmployerPensionContributionPercentage / 100.0m) : 0m;
 
         payslip.EmployeeUnionAmountPaid =
-            payslip.HasUnion ? payslip.GrossPay * (payslip.UnionContributionPercentage / 100.0m) : 0m;
+            employee.HasUnion ? payslip.GrossPay * (employee.UnionContributionPercentage / 100.0m) : 0m;
 
-        payslip.TaxAmountPaid = TaxCalculator.CalculateTax(payslip.GrossPay, payslip.TaxCode);
+        payslip.TaxAmountPaid = TaxCalculator.CalculateTax(payslip.GrossPay, employee.TaxCode);
 
         var weeksInPeriod = CalculateWeeksInPayPeriod(payslip.PayslipStartDate, payslip.PayslipEndDate);
         var sickDaysByWeek = GetSickDaysByWeek(payslip.SickDates, payslip.PayslipStartDate, weeksInPeriod);
 
         payslip.NationalInsuranceAmountPaid = NationalInsuranceCalculator.CalculateNationalInsurance(payslip.GrossPay,
-            weeksInPeriod, sickDaysByWeek, payslip.NationalInsuranceCategory, payslip.DaysWorkedPerWeek);
+            weeksInPeriod, sickDaysByWeek, employee.NationalInsuranceCategory, payslip.DaysWorkedPerWeek);
 
         payslip.NetPay = payslip.GrossPay - (payslip.TaxAmountPaid + payslip.EmployeePensionAmountPaid +
                                              payslip.NationalInsuranceAmountPaid + payslip.EmployeeUnionAmountPaid);

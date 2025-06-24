@@ -12,12 +12,11 @@ public class PayslipRepository(PayslipDbContext context) : IPayslipRepository
         try
         {
             await context.Payslips.AddAsync(payslip);
-
             await context.SaveChangesAsync();
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error occurred adding payslip to database: {ex.Message}");
+            throw new InvalidOperationException($"Failed to create payslip in the database: {ex.Message}");
         }
     }
 }

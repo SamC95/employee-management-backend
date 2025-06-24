@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using employee_management_backend.Service.Utils.Passwords;
 
 namespace employee_management_backend.Model;
 
@@ -57,7 +58,7 @@ public class Employee
     public decimal PayPerHour { get; set; }
     
     [MaxLength(45)]
-    public string? Password { get; set; } = Service.Utils.CreateRandomPassword.GenerateRandomPassword(10);
+    public string? Password { get; set; } = CreateRandomPassword.GenerateRandomPassword(10);
 
     [MaxLength(9)]
     public required string NationalInsuranceNumber { get; set; }

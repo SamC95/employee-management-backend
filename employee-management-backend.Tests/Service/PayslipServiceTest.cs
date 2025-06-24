@@ -22,21 +22,13 @@ public class PayslipServiceTest
     {
         EmployeeId = "7734021",
         EmployeeName = "Hassan Patel",
-        NationalInsuranceNumber = "QQ112233A",
-        NationalInsuranceCategory = "A",
         PayslipStartDate = new DateOnly(2025, 7, 1),
         PayslipEndDate = new DateOnly(2025, 7, 31),
         CompanyName = "Vertex Innovations Ltd",
         EmployeeDepartment = "Product Development",
         DaysWorkedPerWeek = 5,
-        TaxCode = "1257L",
         HoursWorked = 168,
         HolidayHours = 10,
-        HasPension = true,
-        HasUnion = false,
-        PensionContributionPercentage = 4,
-        UnionContributionPercentage = 0,
-        PayPerHour = 23.40m,
         SickDates = [new DateOnly(2025, 7, 11)]
     };
 
@@ -70,7 +62,8 @@ public class PayslipServiceTest
         EmployeePensionContributionPercentage = 0,
         EmployerPensionContributionPercentage = 0,
         HasUnion = false,
-        UnionContributionPercentage = 0
+        UnionContributionPercentage = 0,
+        PayPerHour = 23.40m
     };
 
     [Fact]
@@ -94,6 +87,8 @@ public class PayslipServiceTest
     [Fact]
     public async Task CreatePayslip_WhenDaysWorkedPerWeekIsZero_ThrowsArgumentException()
     {
+        _mockEmployeeRepository.Setup(repo => repo.GetEmployeeById(_testPayslip.EmployeeId))
+            .ReturnsAsync(_testEmployee);
         _testPayslip.DaysWorkedPerWeek = 0;
         
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => _service.CreatePayslip(_testPayslip));
@@ -103,6 +98,8 @@ public class PayslipServiceTest
     [Fact]
     public async Task CreatePayslip_WhenHoursWorkedOrHolidayHoursAreNegative_ThrowsArgumentException()
     {
+        _mockEmployeeRepository.Setup(repo => repo.GetEmployeeById(_testPayslip.EmployeeId))
+            .ReturnsAsync(_testEmployee);
         _testPayslip.HoursWorked = -5;
         
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => _service.CreatePayslip(_testPayslip));
@@ -112,6 +109,9 @@ public class PayslipServiceTest
     [Fact]
     public async Task CreatePayslip_WhenStartDateIsAfterOrEqualToEndDate_ThrowsArgumentException()
     {
+        _mockEmployeeRepository.Setup(repo => repo.GetEmployeeById(_testPayslip.EmployeeId))
+            .ReturnsAsync(_testEmployee);
+        
         _testPayslip.PayslipStartDate = new DateOnly(2025, 6, 30);
         _testPayslip.PayslipEndDate = new DateOnly(2025, 6, 1);
         
@@ -122,7 +122,10 @@ public class PayslipServiceTest
     [Fact]
     public async Task CreatePayslip_WhenPensionContributionIsPositiveButHasPensionFalse_ThrowsArgumentException()
     {
-        _testPayslip.HasPension = false;
+        _mockEmployeeRepository.Setup(repo => repo.GetEmployeeById(_testPayslip.EmployeeId))
+            .ReturnsAsync(_testEmployee);
+        _testEmployee.HasPension = false;
+        _testEmployee.EmployeePensionContributionPercentage = 1.5m;
         
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => _service.CreatePayslip(_testPayslip));
         Assert.Equal("Pension contribution percentage must be 0 if employee does not have a pension", exception.Message);
@@ -131,8 +134,11 @@ public class PayslipServiceTest
     [Fact]
     public async Task CreatePayslip_WhenUnionContributionIsPositiveButHasUnionFalse_ThrowsArgumentException()
     {
-        _testPayslip.HasUnion = false;
-        _testPayslip.UnionContributionPercentage = 1.5m;
+        _mockEmployeeRepository.Setup(repo => repo.GetEmployeeById(_testPayslip.EmployeeId))
+            .ReturnsAsync(_testEmployee);
+        
+        _testEmployee.HasUnion = false;
+        _testEmployee.UnionContributionPercentage = 1.5m;
         
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => _service.CreatePayslip(_testPayslip));
         Assert.Equal("Union contribution percentage must be 0 if employee does not have an union", exception.Message);

@@ -1,6 +1,6 @@
-﻿namespace employee_management_backend.Service.Utils;
+﻿namespace employee_management_backend.Service.Utils.Passwords;
 
-public class HashPasswordUtil
+public static class HashPasswordUtil
 {
     public static string PerformPasswordHash(string plainTextPassword)
     {

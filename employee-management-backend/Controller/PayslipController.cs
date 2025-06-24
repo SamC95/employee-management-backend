@@ -21,6 +21,10 @@ public class PayslipController(IPayslipService payslipService) : ControllerBase
         {
             return BadRequest(new { message = ex.Message });
         }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = $"An error occurred while creating Payslip: {ex.Message}" });
+        }
         catch (Exception ex)
         {
             return StatusCode(500, new { message = $"An unexpected error occurred. {ex.Message}" });
