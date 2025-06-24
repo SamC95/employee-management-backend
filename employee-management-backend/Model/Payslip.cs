@@ -10,9 +10,9 @@ public class Payslip
     
     public required string EmployeeName { get; set; }
     
-    public required string NationalInsuranceNumber { get; set; }
+    public string NationalInsuranceNumber { get; set; }
     
-    public required string NationalInsuranceCategory { get; set; }
+    public string NationalInsuranceCategory { get; set; }
     
     public required DateOnly PayslipStartDate { get; set; }
     
@@ -24,7 +24,7 @@ public class Payslip
     
     public required int DaysWorkedPerWeek { get; set; }
     
-    public required string TaxCode { get; set; }
+    public string TaxCode { get; set; }
     
     public required decimal HoursWorked { get; set; }
     
@@ -40,11 +40,11 @@ public class Payslip
     
     public decimal EmployerPensionAmountPaid { get; set; }
     
-    public required decimal PensionContributionPercentage { get; set; }
+    public decimal PensionContributionPercentage { get; set; }
     
     public decimal EmployeeUnionAmountPaid { get; set; }
     
-    public required decimal UnionContributionPercentage { get; set; }
+    public decimal UnionContributionPercentage { get; set; }
     
     public decimal NationalInsuranceAmountPaid { get; set; }
     

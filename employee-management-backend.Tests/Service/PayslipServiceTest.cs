@@ -53,12 +53,24 @@ public class PayslipServiceTest
         PostCode = "M1 4AB",
         Country = "United Kingdom",
         Gender = "Male",
-        DateOfBirth = new DateOnly(1990, 3, 14),
-        DateHired = new DateOnly(2022, 6, 1),
+        DateOfBirth = new DateOnly(1990,
+            3,
+            14),
+        DateHired = new DateOnly(2022,
+            6,
+            1),
         IsAdmin = false,
         IsManager = true,
         IsActive = true,
-        JobTitle = "Product Developer"
+        JobTitle = "Product Developer",
+        NationalInsuranceNumber = "BB1234567",
+        NationalInsuranceCategory = "A",
+        TaxCode = "1257L",
+        HasPension = false,
+        EmployeePensionContributionPercentage = 0,
+        EmployerPensionContributionPercentage = 0,
+        HasUnion = false,
+        UnionContributionPercentage = 0
     };
 
     [Fact]

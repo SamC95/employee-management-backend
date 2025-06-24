@@ -1,6 +1,7 @@
 ﻿using employee_management_backend.Model;
 using employee_management_backend.Repository.Interface;
 using employee_management_backend.Service.Interface;
+using employee_management_backend.Service.Utils;
 
 namespace employee_management_backend.Service;
 
@@ -8,6 +9,10 @@ public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployee
 {
     public async Task CreateEmployee(Employee employee)
     {
+        Console.WriteLine("Created password: " + employee.Password);
+        var hashedPassword = HashPasswordUtil.PerformPasswordHash(employee.Password);
+        employee.Password = hashedPassword;
+        
         await employeeRepository.CreateEmployee(employee);
     }
 

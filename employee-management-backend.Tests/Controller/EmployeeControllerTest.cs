@@ -30,12 +30,24 @@ public class EmployeeControllerTest
         PostCode = "PostCode",
         Country = "United Kingdom",
         Gender = "Male",
-        DateOfBirth = new DateOnly(1991, 12, 31),
-        DateHired = new DateOnly(2021, 05, 12),
+        DateOfBirth = new DateOnly(1991,
+            12,
+            31),
+        DateHired = new DateOnly(2021,
+            05,
+            12),
         IsAdmin = false,
         IsManager = false,
         IsActive = true,
-        JobTitle = "Graphic Designer"
+        JobTitle = "Graphic Designer",
+        NationalInsuranceNumber = "AA1234567",
+        NationalInsuranceCategory = "A",
+        TaxCode = "1257L",
+        HasPension = false,
+        EmployeePensionContributionPercentage = 0,
+        EmployerPensionContributionPercentage = 0,
+        HasUnion = false,
+        UnionContributionPercentage = 0,
     };
 
     /*

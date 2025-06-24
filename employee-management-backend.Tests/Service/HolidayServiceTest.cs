@@ -46,7 +46,15 @@ public class HolidayServiceTest
             IsAdmin = false,
             IsManager = false,
             IsActive = true,
-            JobTitle = "Tester"
+            JobTitle = "Tester",
+            NationalInsuranceNumber = "AA1234567",
+            NationalInsuranceCategory = "A",
+            TaxCode = "1257L",
+            HasPension = false,
+            EmployeePensionContributionPercentage = 0,
+            EmployerPensionContributionPercentage = 0,
+            HasUnion = false,
+            UnionContributionPercentage = 0,
         };
     }
 

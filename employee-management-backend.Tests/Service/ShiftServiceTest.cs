@@ -42,12 +42,24 @@ public class ShiftServiceTest
             PostCode = "00000",
             Country = "Country",
             Gender = "Test",
-            DateOfBirth = new DateOnly(1990, 1, 1),
-            DateHired = new DateOnly(2020, 1, 1),
+            DateOfBirth = new DateOnly(1990,
+                1,
+                1),
+            DateHired = new DateOnly(2020,
+                1,
+                1),
             IsAdmin = false,
             IsManager = false,
             IsActive = true,
-            JobTitle = "Tester"
+            JobTitle = "Tester",
+            NationalInsuranceNumber = "WW7654321",
+            NationalInsuranceCategory = "A",
+            TaxCode = "1257L",
+            HasPension = false,
+            EmployeePensionContributionPercentage = 0,
+            EmployerPensionContributionPercentage = 0,
+            HasUnion = false,
+            UnionContributionPercentage = 0
         };
     }
     

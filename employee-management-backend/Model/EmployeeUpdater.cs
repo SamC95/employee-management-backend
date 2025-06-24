@@ -6,8 +6,10 @@ public class EmployeeUpdater
 {
     [Key]
     public required string EmployeeId { get; set; }
+    
     public string? ClockId { get; set; }
     public string? FirstName { get; set; }
+    
     public string? MiddleName { get; set; }
     public string? LastName { get; set; }
     public string? Email { get; set; }
@@ -23,4 +25,24 @@ public class EmployeeUpdater
     public bool? IsManager { get; set; }
     public bool? IsActive { get; set; }
     public string? JobTitle { get; set; }
+    
+    public decimal? PayPerHour { get; set; }
+    
+    public string? Password { get; set; }
+
+    public string? NationalInsuranceNumber { get; set; }
+    
+    public string? NationalInsuranceCategory { get; set; }
+    
+    public string? TaxCode { get; set; }
+    
+    public bool? HasPension { get; set; }
+    
+    public decimal? EmployeePensionContributionPercentage { get; set; }
+    
+    public decimal? EmployerPensionContributionPercentage { get; set; }
+    
+    public bool? HasUnion { get; set; }
+    
+    public decimal? UnionContributionPercentage { get; set; }
 }
