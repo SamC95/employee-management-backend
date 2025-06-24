@@ -30,7 +30,10 @@ public class PayslipService(IPayslipRepository payslipRepository, IEmployeeRepos
         {
             case { HasPension: false, EmployeePensionContributionPercentage: > 0 }:
                 throw new ArgumentException(
-                    "Pension contribution percentage must be 0 if employee does not have a pension");
+                    "Employee pension contribution percentage must be 0 if employee does not have a pension");
+            case { HasPension: false, EmployerPensionContributionPercentage: > 0 }:
+                throw new ArgumentException(
+                    "Employer pension contribution percentage must be 0 if employee does not have a pension");
             case { HasUnion: false, UnionContributionPercentage: > 0 }:
                 throw new ArgumentException("Union contribution percentage must be 0 if employee does not have an union");
         }
