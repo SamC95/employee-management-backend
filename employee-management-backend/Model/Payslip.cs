@@ -6,25 +6,32 @@ public class Payslip
 {
     [Key] public Guid PayslipId { get; set; } = Guid.NewGuid();
     
+    [MaxLength(10)]
     public required string? EmployeeId { get; set; }
     
+    [MaxLength(100)]
     public required string EmployeeName { get; set; }
     
-    public string NationalInsuranceNumber { get; set; }
+    [MaxLength(9)]
+    public string? NationalInsuranceNumber { get; set; }
     
-    public string NationalInsuranceCategory { get; set; }
+    [MaxLength(5)]
+    public string? NationalInsuranceCategory { get; set; }
     
     public required DateOnly PayslipStartDate { get; set; }
     
     public required DateOnly PayslipEndDate { get; set; }
     
+    [MaxLength(100)]
     public required string CompanyName { get; set; }
     
+    [MaxLength(100)]
     public required string EmployeeDepartment { get; set; }
     
     public required int DaysWorkedPerWeek { get; set; }
     
-    public string TaxCode { get; set; }
+    [MaxLength(10)]
+    public string? TaxCode { get; set; }
     
     public required decimal HoursWorked { get; set; }
     

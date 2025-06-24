@@ -57,7 +57,7 @@ public class Employee
     public decimal PayPerHour { get; set; }
     
     [MaxLength(45)]
-    public string Password { get; set; } = Service.Utils.CreateRandomPassword.GenerateRandomPassword(10);
+    public string? Password { get; set; } = Service.Utils.CreateRandomPassword.GenerateRandomPassword(10);
 
     [MaxLength(9)]
     public required string NationalInsuranceNumber { get; set; }

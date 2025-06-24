@@ -1,4 +1,5 @@
-﻿using employee_management_backend.Model;
+﻿using System.Reflection;
+using employee_management_backend.Model;
 using employee_management_backend.Repository.Interface;
 using employee_management_backend.Service.Interface;
 using employee_management_backend.Service.Utils;
@@ -12,7 +13,7 @@ public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployee
         Console.WriteLine("Created password: " + employee.Password);
         var hashedPassword = HashPasswordUtil.PerformPasswordHash(employee.Password);
         employee.Password = hashedPassword;
-        
+
         await employeeRepository.CreateEmployee(employee);
     }
 
@@ -22,23 +23,24 @@ public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployee
 
         if (employee == null)
             return false;
-        
-        if (patch.FirstName is not null) employee.FirstName = patch.FirstName;
-        if (patch.LastName is not null) employee.LastName = patch.LastName;
-        if (patch.Email is not null) employee.Email = patch.Email;
-        if (patch.PhoneNum is not null) employee.PhoneNum = patch.PhoneNum;
-        if (patch.Address is not null) employee.Address = patch.Address;
-        if (patch.City is not null) employee.City = patch.City;
-        if (patch.PostCode is not null) employee.PostCode = patch.PostCode;
-        if (patch.Country is not null) employee.Country = patch.Country;
-        if (patch.Gender is not null) employee.Gender = patch.Gender;
-        if (patch.DateOfBirth is not null) employee.DateOfBirth = (DateOnly)patch.DateOfBirth;
-        if (patch.DateHired is not null) employee.DateHired = (DateOnly)patch.DateHired;
-        if (patch.IsAdmin is not null) employee.IsAdmin = (bool)patch.IsAdmin;
-        if (patch.IsManager is not null) employee.IsManager = (bool)patch.IsManager;
-        if (patch.IsActive is not null) employee.IsActive = (bool)patch.IsActive;
-        if (patch.JobTitle is not null) employee.JobTitle = patch.JobTitle;
-        
+
+        var patchProperties = patch.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        var employeeType = employee.GetType();
+
+        foreach (var property in patchProperties)
+        {
+            var value = property.GetValue(patch);
+
+            if (value == null) continue;
+            var employeeProperty = employeeType.GetProperty(property.Name);
+
+            if (employeeProperty == null || !employeeProperty.CanWrite) continue;
+            var targetType = Nullable.GetUnderlyingType(property.PropertyType) ?? employeeProperty.PropertyType;
+            var convertedValue = Convert.ChangeType(value, targetType);
+                    
+            employeeProperty.SetValue(employee, convertedValue);
+        }
+
         await employeeRepository.UpdateEmployeeDetails(employee);
         return true;
     }
@@ -56,7 +58,7 @@ public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployee
     public async Task<List<Employee>> GetEmployeesByJobTitle(string jobTitle)
     {
         jobTitle = string.Join(" ", jobTitle.Split(" ").Select(word => char.ToUpper(word[0]) + word[1..]));
-        
+
         return await employeeRepository.GetEmployeesByJobTitle(jobTitle);
     }
 
