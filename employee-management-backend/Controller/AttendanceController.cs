@@ -18,7 +18,6 @@ public class AttendanceController(IAttendanceService attendanceService) : Contro
 
         try
         {
-            Console.WriteLine($"Clock ID: {clockEvent.ClockId}, Type: {clockEvent.Type}, Timestamp: {clockEvent.Timestamp}, EventId: {clockEvent.EventId}");
             await attendanceService.PostClockEvent(clockEvent);
 
             return Ok(new { message = "Clock event saved successfully" });
