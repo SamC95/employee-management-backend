@@ -56,6 +56,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
         corsPolicyBuilder => { corsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
+    
+    options.AddPolicy("AllowLocalHosts", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173", "http://localhost:5174")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
 });
 
 var app = builder.Build();
@@ -63,7 +71,7 @@ var app = builder.Build();
 app.UseRouting();
 app.UseAuthorization();
 
-app.UseCors("AllowFrontendOrigin");
+app.UseCors("AllowLocalHosts");
 
 app.MapControllers();
 
