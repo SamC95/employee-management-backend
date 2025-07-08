@@ -23,6 +23,12 @@ public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployee
         if (employee == null)
             return false;
 
+        if (patch.Password != null)
+        {
+            var hashedPassword = HashPasswordUtil.PerformPasswordHash(patch.Password ?? string.Empty);
+            patch.Password = hashedPassword;
+        }
+
         var patchProperties = patch.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
         var employeeType = employee.GetType();
 
