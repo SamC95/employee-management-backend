@@ -60,6 +60,8 @@ public class Employee
     [MaxLength(45)]
     public string? Password { get; set; } = CreateRandomPassword.GenerateRandomPassword(10);
 
+    public bool? HasSetOwnPassword { get; set; }
+
     [MaxLength(9)]
     public required string NationalInsuranceNumber { get; set; }
     

@@ -13,6 +13,8 @@ public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployee
         var hashedPassword = HashPasswordUtil.PerformPasswordHash(employee.Password ?? string.Empty);
         employee.Password = hashedPassword;
 
+        employee.HasSetOwnPassword = false;
+
         await employeeRepository.CreateEmployee(employee);
     }
 
@@ -27,6 +29,8 @@ public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployee
         {
             var hashedPassword = HashPasswordUtil.PerformPasswordHash(patch.Password ?? string.Empty);
             patch.Password = hashedPassword;
+            
+            patch.HasSetOwnPassword = true;
         }
 
         var patchProperties = patch.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
