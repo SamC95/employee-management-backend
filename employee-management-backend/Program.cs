@@ -12,12 +12,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
 
+builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IShiftService, ShiftService>();
 builder.Services.AddScoped<IHolidayService, HolidayService>();
 builder.Services.AddScoped<IPayslipService, PayslipService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
@@ -38,6 +40,8 @@ if (dbSettings == null)
 var connectionString =
     $"Host={dbSettings?.Host};Port={dbSettings?.Port};Username={dbSettings?.Username};Password={dbSettings?.Password};Database={dbSettings?.DatabaseName}";
 
+builder.Services.AddDbContext<AnnouncementDbContext>(options =>
+    options.UseNpgsql(connectionString));
 builder.Services.AddDbContext<AttendanceDbContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddDbContext<EmployeeDbContext>(options =>
