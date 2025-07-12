@@ -1,6 +1,7 @@
 ﻿using employee_management_backend.Controller;
 using employee_management_backend.Model;
 using employee_management_backend.Service.Interface;
+using static employee_management_backend.Tests.MockObjects.MockPayslips;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -10,26 +11,14 @@ public class PayslipControllerTest
 {
     private readonly Mock<IPayslipService> _mockService;
     private readonly PayslipController _payslipController;
+    private readonly Payslip _testPayslip;
 
     public PayslipControllerTest()
     {
         _mockService = new Mock<IPayslipService>();
         _payslipController = new PayslipController(_mockService.Object);
+        _testPayslip = CreatePayslip();
     }
-
-    private readonly Payslip _testPayslip = new()
-    {
-        EmployeeId = "7734021",
-        EmployeeName = "Hassan Patel",
-        PayslipStartDate = new DateOnly(2025, 7, 1),
-        PayslipEndDate = new DateOnly(2025, 7, 31),
-        CompanyName = "Vertex Innovations Ltd",
-        EmployeeDepartment = "Product Development",
-        DaysWorkedPerWeek = 5,
-        HoursWorked = 168,
-        HolidayHours = 10,
-        SickDates = [new DateOnly(2025, 7, 11)]
-    };
 
     [Fact]
     public async Task CreatePayslip_WhenSuccessful_ReturnsOk()

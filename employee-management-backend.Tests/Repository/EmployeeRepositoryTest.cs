@@ -1,6 +1,8 @@
 ﻿using employee_management_backend.Model;
 using employee_management_backend.Repository;
 using employee_management_backend.Repository.Database;
+using employee_management_backend.Tests.MockObjects;
+using static employee_management_backend.Tests.MockObjects.MockEmployees;
 using Microsoft.EntityFrameworkCore;
 
 namespace employee_management_backend.Tests.Repository;
@@ -9,6 +11,7 @@ public class EmployeeRepositoryTest
 {
     private readonly EmployeeDbContext _context;
     private readonly EmployeeRepository _repository;
+    private readonly Employee _testEmployee;
 
     public EmployeeRepositoryTest()
     {
@@ -18,40 +21,9 @@ public class EmployeeRepositoryTest
 
         _context = new EmployeeDbContext(dbOptions);
         _repository = new EmployeeRepository(_context);
-    }
 
-    private readonly Employee _testEmployee = new()
-    {
-        EmployeeId = "12345678",
-        ClockId = "5843292",
-        FirstName = "John",
-        LastName = "Doe",
-        Email = "john.doe@gmail.com",
-        PhoneNum = "555-555-5555",
-        Address = "Address 1",
-        City = "City",
-        PostCode = "PostCode",
-        Country = "United Kingdom",
-        Gender = "Male",
-        DateOfBirth = new DateOnly(1991,
-            12,
-            31),
-        DateHired = new DateOnly(2021,
-            05,
-            12),
-        IsAdmin = false,
-        IsManager = false,
-        IsActive = true,
-        JobTitle = "Graphic Designer",
-        NationalInsuranceNumber = "AA1234567",
-        NationalInsuranceCategory = "A",
-        TaxCode = "1257L",
-        HasPension = false,
-        EmployeePensionContributionPercentage = 0,
-        EmployerPensionContributionPercentage = 0,
-        HasUnion = false,
-        UnionContributionPercentage = 0,
-    };
+        _testEmployee = TestEmployeeJohn;
+    }
 
     [Fact]
     public async Task CreateEmployee_AddsEmployeeAndSavesSuccessfully()

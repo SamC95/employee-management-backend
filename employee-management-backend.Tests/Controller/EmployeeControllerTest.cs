@@ -1,6 +1,7 @@
 ﻿using employee_management_backend.Controller;
 using employee_management_backend.Model;
 using employee_management_backend.Service.Interface;
+using static employee_management_backend.Tests.MockObjects.MockEmployees;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -10,46 +11,15 @@ public class EmployeeControllerTest
 {
     private readonly Mock<IEmployeeService> _mockService;
     private readonly EmployeeController _employeeController;
+    private readonly Employee _testEmployee;
 
     public EmployeeControllerTest()
     {
         _mockService = new Mock<IEmployeeService>();
         _employeeController = new EmployeeController(_mockService.Object);
+        _testEmployee = TestEmployeeJohn;
     }
-
-    private readonly Employee _testEmployee = new()
-    {
-        EmployeeId = "12345678",
-        ClockId = "5843292",
-        FirstName = "John",
-        LastName = "Doe",
-        Email = "john.doe@gmail.com",
-        PhoneNum = "555-555-5555",
-        Address = "Address 1",
-        City = "City",
-        PostCode = "PostCode",
-        Country = "United Kingdom",
-        Gender = "Male",
-        DateOfBirth = new DateOnly(1991,
-            12,
-            31),
-        DateHired = new DateOnly(2021,
-            05,
-            12),
-        IsAdmin = false,
-        IsManager = false,
-        IsActive = true,
-        JobTitle = "Graphic Designer",
-        NationalInsuranceNumber = "AA1234567",
-        NationalInsuranceCategory = "A",
-        TaxCode = "1257L",
-        HasPension = false,
-        EmployeePensionContributionPercentage = 0,
-        EmployerPensionContributionPercentage = 0,
-        HasUnion = false,
-        UnionContributionPercentage = 0,
-    };
-
+    
     /*
     TODO: Employee database fields are still subject to change based on needs.
     TODO: Any employee unit tests may need refactoring when any changes are made

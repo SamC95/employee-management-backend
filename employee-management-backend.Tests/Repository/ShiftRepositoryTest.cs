@@ -1,6 +1,7 @@
 ﻿using employee_management_backend.Model;
 using employee_management_backend.Repository;
 using employee_management_backend.Repository.Database;
+using static employee_management_backend.Tests.MockObjects.MockWorkShifts;
 using Microsoft.EntityFrameworkCore;
 
 namespace employee_management_backend.Tests.Repository;
@@ -9,7 +10,8 @@ public class ShiftRepositoryTest
 {
     private readonly ShiftDbContext _context;
     private readonly ShiftRepository _repository;
-
+    private readonly WorkShift _testShift;
+    
     public ShiftRepositoryTest()
     {
         var dbOptions = new DbContextOptionsBuilder<ShiftDbContext>()
@@ -18,16 +20,9 @@ public class ShiftRepositoryTest
 
         _context = new ShiftDbContext(dbOptions);
         _repository = new ShiftRepository(_context);
+        
+        _testShift = TestShift;
     }
-
-    private readonly WorkShift _testShift = new()
-    {
-        ShiftId = Guid.NewGuid(),
-        EmployeeId = "12345678",
-        Date = new DateOnly(2018, 5, 5),
-        StartTime = new TimeOnly(08, 30, 00),
-        EndTime = new TimeOnly(17, 30, 00)
-    };
 
     [Fact]
     public async Task AddWorkShift_ShouldSuccessfullySaveShift()

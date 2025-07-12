@@ -2,6 +2,8 @@
 using employee_management_backend.Repository.Interface;
 using employee_management_backend.Service;
 using Moq;
+using static employee_management_backend.Tests.MockObjects.MockHolidayEvents;
+using static employee_management_backend.Tests.MockObjects.MockEmployees;
 
 namespace employee_management_backend.Tests.Service;
 
@@ -18,88 +20,48 @@ public class HolidayServiceTest
         _service = new HolidayService(_mockHolidayRepository.Object, _mockEmployeeRepository.Object);
     }
 
-    private readonly HolidayEvent _holidayEvent = new()
-    {
-        EventId = Guid.NewGuid(),
-        EmployeeId = "12345678",
-        Date = new DateOnly(2018, 5, 5),
-        Status = "in-progress",
-    };
-
-    private static Employee CreateTestEmployee(string id)
-    {
-        return new Employee
-        {
-            EmployeeId = id,
-            ClockId = "123456",
-            FirstName = "Test",
-            LastName = "User",
-            Email = "test@example.com",
-            PhoneNum = "0000000000",
-            Address = "123 Street",
-            City = "City",
-            PostCode = "00000",
-            Country = "Country",
-            Gender = "Test",
-            DateOfBirth = new DateOnly(1990, 1, 1),
-            DateHired = new DateOnly(2020, 1, 1),
-            IsAdmin = false,
-            IsManager = false,
-            IsActive = true,
-            JobTitle = "Tester",
-            NationalInsuranceNumber = "AA1234567",
-            NationalInsuranceCategory = "A",
-            TaxCode = "1257L",
-            HasPension = false,
-            EmployeePensionContributionPercentage = 0,
-            EmployerPensionContributionPercentage = 0,
-            HasUnion = false,
-            UnionContributionPercentage = 0,
-        };
-    }
-
     [Fact]
     public async Task CreateHolidayRequest_AddsRequest_WhenEmployeeExists()
     {
-        if (_holidayEvent.EmployeeId != null)
-            _mockEmployeeRepository.Setup(repo => repo.GetEmployeeById(_holidayEvent.EmployeeId))
-                .ReturnsAsync(CreateTestEmployee(_holidayEvent.EmployeeId));
+        if (InProgressHolidayEvent.EmployeeId != null)
+            _mockEmployeeRepository.Setup(repo => repo.GetEmployeeById(InProgressHolidayEvent.EmployeeId))
+                .ReturnsAsync(CreateTestEmployee(InProgressHolidayEvent.EmployeeId));
 
-        await _service.CreateHolidayRequest(_holidayEvent);
+        await _service.CreateHolidayRequest(InProgressHolidayEvent);
 
-        _mockHolidayRepository.Verify(repo => repo.CreateHolidayRequest(_holidayEvent), Times.Once);
+        _mockHolidayRepository.Verify(repo => repo.CreateHolidayRequest(InProgressHolidayEvent), Times.Once);
     }
 
     [Fact]
     public async Task CreateHolidayRequest_ThrowsArgumentException_WhenEmployeeDoesNotExist()
     {
-        _mockEmployeeRepository.Setup(repo => repo.GetEmployeeById(_holidayEvent.EmployeeId))
+        _mockEmployeeRepository.Setup(repo => repo.GetEmployeeById(InProgressHolidayEvent.EmployeeId))
             .ReturnsAsync((Employee?)null);
         
-        await Assert.ThrowsAsync<ArgumentException>(() => _service.CreateHolidayRequest(_holidayEvent));
+        await Assert.ThrowsAsync<ArgumentException>(() => _service.CreateHolidayRequest(InProgressHolidayEvent));
         
-        _mockHolidayRepository.Verify(repo => repo.CreateHolidayRequest(_holidayEvent), Times.Never);
+        _mockHolidayRepository.Verify(repo => repo.CreateHolidayRequest(InProgressHolidayEvent), Times.Never);
     }
 
     [Fact]
     public async Task UpdateHolidayStatus_WhenRepositoryReturnsFalse_ReturnsFalse()
     {
-        _mockHolidayRepository.Setup(repo => repo.UpdateHolidayStatus(_holidayEvent)).ReturnsAsync(false);
+        _mockHolidayRepository.Setup(repo => repo.UpdateHolidayStatus(InProgressHolidayEvent)).ReturnsAsync(false);
         
-        var result = await _service.UpdateHolidayStatus(_holidayEvent);
+        var result = await _service.UpdateHolidayStatus(InProgressHolidayEvent);
         
         Assert.False(result);
-        _mockHolidayRepository.Verify(repo => repo.UpdateHolidayStatus(_holidayEvent), Times.Once);
+        _mockHolidayRepository.Verify(repo => repo.UpdateHolidayStatus(InProgressHolidayEvent), Times.Once);
     }
 
     [Fact]
     public async Task UpdateHolidayStatus_WhenRepositoryReturnsTrue_ReturnsTrue()
     {
-        _mockHolidayRepository.Setup(repo => repo.UpdateHolidayStatus(_holidayEvent)).ReturnsAsync(true);
+        _mockHolidayRepository.Setup(repo => repo.UpdateHolidayStatus(InProgressHolidayEvent)).ReturnsAsync(true);
         
-        var result = await _service.UpdateHolidayStatus(_holidayEvent);
+        var result = await _service.UpdateHolidayStatus(InProgressHolidayEvent);
         
         Assert.True(result);
-        _mockHolidayRepository.Verify(repo => repo.UpdateHolidayStatus(_holidayEvent), Times.Once);
+        _mockHolidayRepository.Verify(repo => repo.UpdateHolidayStatus(InProgressHolidayEvent), Times.Once);
     }
 }

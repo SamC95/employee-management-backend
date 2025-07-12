@@ -2,6 +2,8 @@
 using employee_management_backend.Repository.Interface;
 using employee_management_backend.Service;
 using employee_management_backend.Service.Utils.Passwords;
+using static employee_management_backend.Tests.MockObjects.MockEmployees;
+using static employee_management_backend.Tests.MockObjects.MockLogins;
 using Moq;
 
 namespace employee_management_backend.Tests.Service;
@@ -10,52 +12,16 @@ public class LoginServiceTest
 {
     private readonly Mock<IEmployeeRepository> _mockEmployeeRepository;
     private readonly LoginService _service;
+    private readonly Employee _testEmployee;
+    private readonly LoginDetails _testLogin;
 
     public LoginServiceTest()
     {
         _mockEmployeeRepository = new Mock<IEmployeeRepository>();
         _service = new LoginService(_mockEmployeeRepository.Object);
+        _testEmployee = TestEmployeeHassan;
+        _testLogin = TestLogin;
     }
-
-    private readonly LoginDetails _testLogin = new()
-    {
-        UserId = "7734021",
-        Password = "testpassword",
-    };
-
-    private readonly Employee _testEmployee = new()
-    {
-        EmployeeId = "7734021",
-        ClockId = "9988776",
-        FirstName = "Hassan",
-        LastName = "Patel",
-        Email = "hassan.patel@vertexinnovations.co.uk",
-        PhoneNum = "07700 900234",
-        Address = "42 Tech Park Avenue",
-        City = "Manchester",
-        PostCode = "M1 4AB",
-        Country = "United Kingdom",
-        Gender = "Male",
-        DateOfBirth = new DateOnly(1990,
-            3,
-            14),
-        DateHired = new DateOnly(2022,
-            6,
-            1),
-        IsAdmin = false,
-        IsManager = true,
-        IsActive = true,
-        JobTitle = "Product Developer",
-        NationalInsuranceNumber = "BB1234567",
-        NationalInsuranceCategory = "A",
-        TaxCode = "1257L",
-        HasPension = false,
-        EmployeePensionContributionPercentage = 0,
-        EmployerPensionContributionPercentage = 0,
-        HasUnion = false,
-        UnionContributionPercentage = 0,
-        PayPerHour = 23.40m
-    };
 
     [Fact]
     public async Task ValidateLogin_ShouldReturnTrue_WhenUserIdAndPasswordAreCorrect()

@@ -1,6 +1,7 @@
 ﻿using employee_management_backend.Controller;
 using employee_management_backend.Model;
 using employee_management_backend.Service.Interface;
+using static employee_management_backend.Tests.MockObjects.MockLogins;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -10,18 +11,14 @@ public class LoginControllerTest
 {
     private readonly Mock<ILoginService> _mockService;
     private readonly LoginController _controller;
+    private readonly LoginDetails _testLogin;
 
     public LoginControllerTest()
     {
         _mockService = new Mock<ILoginService>();
         _controller = new LoginController(_mockService.Object);
+        _testLogin = TestLogin;
     }
-
-    private readonly LoginDetails _testLogin = new()
-    {
-        UserId = "7734021",
-        Password = "testpassword",
-    };
 
     [Fact]
     public async Task ValidateLogin_WhenSuccessful_ReturnsOk()

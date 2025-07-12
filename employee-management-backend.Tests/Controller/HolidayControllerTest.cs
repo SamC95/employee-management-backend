@@ -1,6 +1,7 @@
 ﻿using employee_management_backend.Controller;
 using employee_management_backend.Model;
 using employee_management_backend.Service.Interface;
+using static employee_management_backend.Tests.MockObjects.MockHolidayEvents;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -10,20 +11,14 @@ public class HolidayControllerTest
 {
     private readonly Mock<IHolidayService> _mockService;
     private readonly HolidayController _holidayController;
+    private readonly HolidayEvent _holidayEvent;
 
     public HolidayControllerTest()
     {
         _mockService = new Mock<IHolidayService>();
         _holidayController = new HolidayController(_mockService.Object);
+        _holidayEvent = InProgressHolidayEvent;
     }
-    
-    private readonly HolidayEvent _holidayEvent = new()
-    {
-        EventId = Guid.NewGuid(),
-        EmployeeId = "12345678",
-        Date = new DateOnly(2018, 5, 5),
-        Status = "in-progress",
-    };
 
     [Fact]
     public async Task CreateHolidayRequest_ValidHolidayRequest_ReturnsOk()

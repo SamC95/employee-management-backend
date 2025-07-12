@@ -1,6 +1,7 @@
 ﻿using employee_management_backend.Model;
 using employee_management_backend.Repository.Interface;
 using employee_management_backend.Service;
+using static employee_management_backend.Tests.MockObjects.MockEmployees;
 using Moq;
 
 namespace employee_management_backend.Tests.Service;
@@ -9,46 +10,16 @@ public class EmployeeServiceTest
 {
     private readonly Mock<IEmployeeRepository> _mockRepository;
     private readonly EmployeeService _employeeService;
+    private readonly Employee _testEmployee;
 
     public EmployeeServiceTest()
     {
         _mockRepository = new Mock<IEmployeeRepository>();
         _employeeService = new EmployeeService(_mockRepository.Object);
+
+        _testEmployee = TestEmployeeJohn;
     }
-
-    private readonly Employee _testEmployee = new()
-    {
-        EmployeeId = "12345678",
-        ClockId = "5843292",
-        FirstName = "John",
-        LastName = "Doe",
-        Email = "john.doe@gmail.com",
-        PhoneNum = "555-555-5555",
-        Address = "Address 1",
-        City = "City",
-        PostCode = "PostCode",
-        Country = "United Kingdom",
-        Gender = "Male",
-        DateOfBirth = new DateOnly(1991,
-            12,
-            31),
-        DateHired = new DateOnly(2021,
-            05,
-            12),
-        IsAdmin = false,
-        IsManager = false,
-        IsActive = true,
-        JobTitle = "Graphic Designer",
-        NationalInsuranceNumber = "AA1234567",
-        NationalInsuranceCategory = "A",
-        TaxCode = "1257L",
-        HasPension = false,
-        EmployeePensionContributionPercentage = 0,
-        EmployerPensionContributionPercentage = 0,
-        HasUnion = false,
-        UnionContributionPercentage = 0,
-    };
-
+    
     [Fact]
     public async Task CreateEmployee_CallsRepository()
     {

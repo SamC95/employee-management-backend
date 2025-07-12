@@ -1,6 +1,7 @@
 ﻿using employee_management_backend.Controller;
 using employee_management_backend.Model;
 using employee_management_backend.Service.Interface;
+using static employee_management_backend.Tests.MockObjects.MockWorkShifts;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -10,21 +11,14 @@ public class ShiftControllerTest
 {
     private readonly Mock<IShiftService> _mockService;
     private readonly ShiftController _controller;
+    private readonly WorkShift _testShift;
 
     public ShiftControllerTest()
     {
         _mockService = new Mock<IShiftService>();
         _controller = new ShiftController(_mockService.Object);
+        _testShift = TestShift;
     }
-
-    private readonly WorkShift _testShift = new()
-    {
-        ShiftId = Guid.NewGuid(),
-        EmployeeId = "12345678",
-        Date = new DateOnly(2018, 5, 5),
-        StartTime = new TimeOnly(08, 30, 00),
-        EndTime = new TimeOnly(17, 30, 00)
-    };
 
     [Fact]
     public async Task AddWorkShift_ValidShift_ReturnsOk()

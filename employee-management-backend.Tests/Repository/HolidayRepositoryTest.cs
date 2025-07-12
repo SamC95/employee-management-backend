@@ -1,6 +1,7 @@
 ﻿using employee_management_backend.Model;
 using employee_management_backend.Repository;
 using employee_management_backend.Repository.Database;
+using static employee_management_backend.Tests.MockObjects.MockHolidayEvents;
 using Microsoft.EntityFrameworkCore;
 
 namespace employee_management_backend.Tests.Repository;
@@ -9,6 +10,7 @@ public class HolidayRepositoryTest
 {
     private readonly HolidayDbContext _context;
     private readonly HolidayRepository _repository;
+    private readonly HolidayEvent _holidayEvent;
 
     public HolidayRepositoryTest()
     {
@@ -18,15 +20,9 @@ public class HolidayRepositoryTest
 
         _context = new HolidayDbContext(dbOptions);
         _repository = new HolidayRepository(_context);
-    }
 
-    private readonly HolidayEvent _holidayEvent = new()
-    {
-        EventId = Guid.NewGuid(),
-        EmployeeId = "12345678",
-        Date = new DateOnly(2018, 5, 5),
-        Status = "in-progress",
-    };
+        _holidayEvent = InProgressHolidayEvent;
+    }
 
     [Fact]
     public async Task CreateHolidayRequest_ShouldSuccessfullySaveHolidayRequest()
