@@ -16,7 +16,7 @@ public class HolidayRepository(HolidayDbContext context) : IHolidayRepository
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error occurred adding holiday event to database: {ex.Message}");
+            throw new Exception($"Error occurred adding holiday event to database: {ex.Message}");
         }
     }
 
