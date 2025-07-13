@@ -7,6 +7,7 @@ using employee_management_backend.Repository.Interface;
 using employee_management_backend.Service;
 using employee_management_backend.Service.Interface;
 using employee_management_backend.Service.Utils.Authentication;
+using employee_management_backend.Service.Utils.Authentication.Interface;
 using employee_management_backend.Service.Utils.Calculators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,7 @@ builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
 builder.Services.AddScoped<IHolidayRepository, HolidayRepository>();
 builder.Services.AddScoped<IPayslipRepository, PayslipRepository>();
-builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddSingleton<PayslipCalculator>();
 
