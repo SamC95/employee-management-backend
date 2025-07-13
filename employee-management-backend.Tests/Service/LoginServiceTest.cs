@@ -27,7 +27,7 @@ public class LoginServiceTest
     public async Task ValidateLogin_ShouldReturnTrue_WhenUserIdAndPasswordAreCorrect()
     {
         var hashedPassword = HashPasswordUtil.PerformPasswordHash("testpassword");
-
+        
         _testEmployee.Password = hashedPassword;
 
         _mockEmployeeRepository.Setup(repository => repository.GetEmployeeById(_testEmployee.EmployeeId))
@@ -35,7 +35,8 @@ public class LoginServiceTest
 
         var result = await _service.ValidateLogin(_testLogin);
 
-        Assert.True(result);
+        Assert.NotNull(result);
+        Assert.Equal(_testEmployee.EmployeeId, result.EmployeeId);
     }
 
     [Fact]
@@ -46,7 +47,7 @@ public class LoginServiceTest
 
         var result = await _service.ValidateLogin(_testLogin);
 
-        Assert.False(result);
+        Assert.Null(result);
     }
 
     [Fact]
@@ -61,7 +62,7 @@ public class LoginServiceTest
 
         var result = await _service.ValidateLogin(_testLogin);
 
-        Assert.False(result);
+        Assert.Null(result);
     }
 
     [Fact]
@@ -74,7 +75,7 @@ public class LoginServiceTest
         
         var result = await _service.ValidateLogin(_testLogin);
         
-        Assert.False(result);
+        Assert.Null(result);
     }
 
     [Fact]
