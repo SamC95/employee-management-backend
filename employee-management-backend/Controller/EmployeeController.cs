@@ -1,5 +1,7 @@
-﻿using employee_management_backend.Model;
+﻿using System.Security.Claims;
+using employee_management_backend.Model;
 using employee_management_backend.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -110,5 +112,22 @@ public class EmployeeController(IEmployeeService employeeService) : ControllerBa
             Console.WriteLine($"Error retrieving clock data for id {clockId}: {ex.Message}");
             return StatusCode(500, new { message = $"An unexpected error occurred: {ex.Message}" });
         }
+    }
+
+    [Authorize]
+    [HttpGet("current")]
+    public async Task<IActionResult> GetCurrentlyLoggedInUserDetails()
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized();
+        
+        var employee = await employeeService.GetEmployeeById(userId);
+        
+        if (employee == null)
+            return NotFound(new { message = "Employee was not found" });
+        
+        return Ok(employee);
     }
 }

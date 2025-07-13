@@ -96,11 +96,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-app.UseRouting();
-app.UseAuthorization();
-app.UseAuthentication();
-
 app.UseCors("AllowLocalHosts");
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
