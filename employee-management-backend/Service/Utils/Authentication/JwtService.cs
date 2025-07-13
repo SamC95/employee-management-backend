@@ -1,11 +1,12 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using employee_management_backend.Service.Utils.Authentication.Interface;
 using Microsoft.IdentityModel.Tokens;
 
 namespace employee_management_backend.Service.Utils.Authentication;
 
-public class JwtService(IConfiguration config)
+public class JwtService(IConfiguration config) : IJwtService
 {
     public string GenerateJwtToken(string employeeId, string employeeName)
     {

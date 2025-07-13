@@ -7,19 +7,17 @@ namespace employee_management_backend.Service;
 
 public class LoginService(IEmployeeRepository employeeRepository) : ILoginService
 {
-    public async Task<bool> ValidateLogin(LoginDetails loginDetails)
+    public async Task<Employee?> ValidateLogin(LoginDetails loginDetails)
     {
         ArgumentNullException.ThrowIfNull(loginDetails);
 
         var employee = await employeeRepository.GetEmployeeById(loginDetails.UserId);
 
-        if (employee == null)
-            return false;
+        if (employee == null || string.IsNullOrEmpty(loginDetails.Password))
+            return null;
 
-        if (string.IsNullOrEmpty(employee.Password)) 
-            return false;
-        
-        var doesPasswordMatch = HashPasswordUtil.VerifyPasswordHash(loginDetails.Password, employee.Password);
-        return doesPasswordMatch;
+        var doesPasswordMatch = employee.Password != null &&
+                                HashPasswordUtil.VerifyPasswordHash(loginDetails.Password, employee.Password);
+        return doesPasswordMatch ? employee : null;
     }
 }
