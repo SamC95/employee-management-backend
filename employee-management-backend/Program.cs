@@ -1,3 +1,4 @@
+using System.Text;
 using employee_management_backend.Database;
 using employee_management_backend.Model;
 using employee_management_backend.Repository;
@@ -5,8 +6,11 @@ using employee_management_backend.Repository.Database;
 using employee_management_backend.Repository.Interface;
 using employee_management_backend.Service;
 using employee_management_backend.Service.Interface;
+using employee_management_backend.Service.Utils.Authentication;
 using employee_management_backend.Service.Utils.Calculators;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +29,7 @@ builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
 builder.Services.AddScoped<IHolidayRepository, HolidayRepository>();
 builder.Services.AddScoped<IPayslipRepository, PayslipRepository>();
+builder.Services.AddScoped<JwtService>();
 
 builder.Services.AddSingleton<PayslipCalculator>();
 
@@ -70,10 +75,29 @@ builder.Services.AddCors(options =>
     });
 });
 
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? string.Empty))
+        };
+    });
+
 var app = builder.Build();
 
 app.UseRouting();
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.UseCors("AllowLocalHosts");
 
