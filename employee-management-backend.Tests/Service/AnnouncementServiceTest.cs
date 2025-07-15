@@ -9,13 +9,15 @@ namespace employee_management_backend.Tests.Service;
 public class AnnouncementServiceTest
 {
     private readonly Mock<IAnnouncementRepository> _mockRepository;
+    private readonly Mock<IEmployeeRepository> _mockEmployeeRepository;
     private readonly AnnouncementService _service;
     private readonly Announcement _testAnnouncement;
 
     public AnnouncementServiceTest()
     {
         _mockRepository = new Mock<IAnnouncementRepository>();
-        _service = new AnnouncementService(_mockRepository.Object);
+        _mockEmployeeRepository = new Mock<IEmployeeRepository>();
+        _service = new AnnouncementService(_mockRepository.Object, _mockEmployeeRepository.Object);
 
         _testAnnouncement = NewAnnouncementPost;
     }

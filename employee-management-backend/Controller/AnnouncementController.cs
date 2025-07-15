@@ -1,5 +1,7 @@
-﻿using employee_management_backend.Model;
+﻿using System.Security.Claims;
+using employee_management_backend.Model;
 using employee_management_backend.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace employee_management_backend.Controller;
@@ -16,6 +18,30 @@ public class AnnouncementController(IAnnouncementService announcementService) : 
             await announcementService.CreateAnnouncementPost(announcement);
 
             return Ok(new { message = $"Announcement successfully created and added to database." });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = $"An unexpected error occured: {ex.Message}" });
+        }
+    }
+
+    [Authorize]
+    [HttpGet("recent")]
+    public async Task<IActionResult> GetRecentAnnouncements()
+    {
+        try
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+            
+            var announcements = await announcementService.GetRecentAnnouncements(userId);
+
+            return Ok(announcements);
         }
         catch (ArgumentException ex)
         {
