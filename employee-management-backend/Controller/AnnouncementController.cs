@@ -31,15 +31,15 @@ public class AnnouncementController(IAnnouncementService announcementService) : 
 
     [Authorize]
     [HttpGet("recent")]
-    public async Task<IActionResult> GetRecentAnnouncements()
+    public async Task<IActionResult> GetRecentAnnouncements([FromQuery] int limit)
     {
         try
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
-            
-            var announcements = await announcementService.GetRecentAnnouncements(userId);
+
+            var announcements = await announcementService.GetRecentAnnouncements(userId, limit);
 
             return Ok(announcements);
         }

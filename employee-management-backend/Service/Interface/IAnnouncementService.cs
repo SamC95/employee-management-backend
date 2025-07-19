@@ -6,5 +6,5 @@ public interface IAnnouncementService
 {
     Task CreateAnnouncementPost(Announcement announcement);
     
-    Task<List<Announcement>> GetRecentAnnouncements(string userId);
+    Task<List<Announcement>> GetRecentAnnouncements(string userId, int limit);
 }

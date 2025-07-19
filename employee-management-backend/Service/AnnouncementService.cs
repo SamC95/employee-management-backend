@@ -17,7 +17,7 @@ public class AnnouncementService(IAnnouncementRepository announcementRepository,
         await announcementRepository.CreateAnnouncementPost(announcement);
     }
 
-    public async Task<List<Announcement>> GetRecentAnnouncements(string userId)
+    public async Task<List<Announcement>> GetRecentAnnouncements(string userId, int limit)
     {
         var employee = await employeeRepository.GetEmployeeById(userId);
         if (employee == null)
@@ -28,6 +28,6 @@ public class AnnouncementService(IAnnouncementRepository announcementRepository,
             employee.IsManager ? new List<string> { "All-Staff", "Management" } :
             new List<string> { "All-Staff" };
 
-        return await announcementRepository.GetRecentAnnouncements(allowedAudiences, 5);
+        return await announcementRepository.GetRecentAnnouncements(allowedAudiences, limit);
     }
 }

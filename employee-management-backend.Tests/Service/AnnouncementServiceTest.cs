@@ -63,7 +63,7 @@ public class AnnouncementServiceTest
         _mockRepository.Setup(repo => repo.GetRecentAnnouncements(expectedAudiences, 5))
             .ReturnsAsync(expectedAnnouncements);
 
-        var result = await _service.GetRecentAnnouncements(_testAdmin.EmployeeId);
+        var result = await _service.GetRecentAnnouncements(_testAdmin.EmployeeId, 5);
 
         Assert.Equal(expectedAnnouncements, result);
     }
@@ -83,7 +83,7 @@ public class AnnouncementServiceTest
         _mockRepository.Setup(repo => repo.GetRecentAnnouncements(expectedAudiences, 5))
             .ReturnsAsync(expectedAnnouncements);
 
-        var result = await _service.GetRecentAnnouncements(_testManager.EmployeeId);
+        var result = await _service.GetRecentAnnouncements(_testManager.EmployeeId, 5);
 
         Assert.Equal(expectedAnnouncements, result);
     }
@@ -103,7 +103,7 @@ public class AnnouncementServiceTest
         _mockRepository.Setup(repo => repo.GetRecentAnnouncements(expectedAudiences, 5))
             .ReturnsAsync(expectedAnnouncements);
         
-        var result = await _service.GetRecentAnnouncements(_testEmployee.EmployeeId);
+        var result = await _service.GetRecentAnnouncements(_testEmployee.EmployeeId, 5);
         
         Assert.Equal(expectedAnnouncements, result);
     }
@@ -114,7 +114,7 @@ public class AnnouncementServiceTest
         const string userId = "missing-id";
         _mockEmployeeRepository.Setup(repo => repo.GetEmployeeById(userId)).ReturnsAsync((Employee)null);
         
-        var exception = await Assert.ThrowsAsync<ArgumentException>(() => _service.GetRecentAnnouncements(userId));
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => _service.GetRecentAnnouncements(userId, 5));
         
         Assert.Equal("Employee not found", exception.Message);
     }

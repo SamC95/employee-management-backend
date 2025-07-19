@@ -89,10 +89,10 @@ public class AnnouncementControllerTest
 
         var announcements = new List<Announcement> { _testAnnouncement };
 
-        _mockService.Setup(service => service.GetRecentAnnouncements(_testEmployee.EmployeeId))
+        _mockService.Setup(service => service.GetRecentAnnouncements(_testEmployee.EmployeeId, 5))
             .ReturnsAsync(announcements);
 
-        var result = await _controller.GetRecentAnnouncements();
+        var result = await _controller.GetRecentAnnouncements(5);
 
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
@@ -104,10 +104,10 @@ public class AnnouncementControllerTest
     {
         SetUserContext(_testEmployee.EmployeeId);
 
-        _mockService.Setup(service => service.GetRecentAnnouncements(_testEmployee.EmployeeId))
+        _mockService.Setup(service => service.GetRecentAnnouncements(_testEmployee.EmployeeId, 5))
             .ThrowsAsync(new ArgumentException("Invalid user"));
 
-        var result = await _controller.GetRecentAnnouncements();
+        var result = await _controller.GetRecentAnnouncements(5);
 
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
         Assert.Equal(400, badRequestResult.StatusCode);
@@ -120,10 +120,10 @@ public class AnnouncementControllerTest
     {
         SetUserContext(_testEmployee.EmployeeId);
 
-        _mockService.Setup(service => service.GetRecentAnnouncements(_testEmployee.EmployeeId))
+        _mockService.Setup(service => service.GetRecentAnnouncements(_testEmployee.EmployeeId, 5))
             .ThrowsAsync(new Exception("Database error"));
         
-        var result = await _controller.GetRecentAnnouncements();
+        var result = await _controller.GetRecentAnnouncements(5);
         
         var serverErrorResult = Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, serverErrorResult.StatusCode);
