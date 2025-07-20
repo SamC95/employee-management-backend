@@ -1,6 +1,7 @@
 ﻿using employee_management_backend.Model;
 using employee_management_backend.Repository.Database;
 using employee_management_backend.Repository.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace employee_management_backend.Repository;
 
@@ -33,5 +34,23 @@ public class HolidayRepository(HolidayDbContext context) : IHolidayRepository
 
         context.SaveChanges();
         return Task.FromResult(true);
+    }
+
+    public async Task<List<HolidayEvent>> GetUpcomingHolidaysForLoggedInUser(string userId, int amountToRetrieve)
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        
+        try
+        {
+            return await context.Holidays
+                .Where(holiday => holiday.EmployeeId == userId && holiday.Date >= today)
+                .OrderBy(holiday => holiday.Date)
+                .Take(amountToRetrieve)
+                .ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error occurred getting holidays for logged in user: {ex.Message}");
+        }
     }
 }

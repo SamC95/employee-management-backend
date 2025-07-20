@@ -1,5 +1,7 @@
-﻿using employee_management_backend.Model;
+﻿using System.Security.Claims;
+using employee_management_backend.Model;
 using employee_management_backend.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace employee_management_backend.Controller;
@@ -48,5 +50,29 @@ public class HolidayController(IHolidayService holidayService) : ControllerBase
         }
 
         return Ok(new { message = "Holiday status updated successfully" });
+    }
+
+    [Authorize]
+    [HttpGet("upcoming")]
+    public async Task<IActionResult> GetUpcomingHolidaysForLoggedInUser([FromQuery] int limit)
+    {
+        try
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var upcomingHolidays = await holidayService.GetUpcomingHolidaysForLoggedInUser(userId, limit);
+
+            return Ok(upcomingHolidays);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = $"An unexpected error occurred. {ex.Message}" });
+        }
     }
 }

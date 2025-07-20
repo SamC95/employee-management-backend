@@ -22,4 +22,9 @@ public class HolidayService(IHolidayRepository holidayRepository, IEmployeeRepos
     {
         return await holidayRepository.UpdateHolidayStatus(holidayEvent);
     }
+
+    public async Task<List<HolidayEvent>> GetUpcomingHolidaysForLoggedInUser(string userId, int limit)
+    {
+        return await holidayRepository.GetUpcomingHolidaysForLoggedInUser(userId, limit);
+    }
 }
