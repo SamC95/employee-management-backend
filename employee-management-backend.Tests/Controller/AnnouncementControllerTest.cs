@@ -2,6 +2,7 @@
 using employee_management_backend.Controller;
 using employee_management_backend.Model;
 using employee_management_backend.Service.Interface;
+using employee_management_backend.Tests.Controller.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static employee_management_backend.Tests.MockObjects.MockAnnouncements;
@@ -23,21 +24,6 @@ public class AnnouncementControllerTest
         _controller = new AnnouncementController(_mockService.Object);
         _testAnnouncement = NewAnnouncementPost;
         _testEmployee = TestEmployeeJohn;
-    }
-
-    private void SetUserContext(string userId)
-    {
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, userId),
-        };
-        var identity = new ClaimsIdentity(claims, "TestAuth");
-        var user = new ClaimsPrincipal(identity);
-
-        _controller.ControllerContext = new ControllerContext
-        {
-            HttpContext = new DefaultHttpContext { User = user }
-        };
     }
 
     [Fact]
@@ -85,7 +71,11 @@ public class AnnouncementControllerTest
     [Fact]
     public async Task GetRecentAnnouncements_ReturnsOkResult_WithAnnouncements()
     {
-        SetUserContext(_testEmployee.EmployeeId);
+        var user = UserContext.SetUserContext(_testEmployee.EmployeeId);
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = user }
+        };
 
         var announcements = new List<Announcement> { _testAnnouncement };
 
@@ -102,7 +92,11 @@ public class AnnouncementControllerTest
     [Fact]
     public async Task GetRecentAnnouncements_ReturnsBadRequest_OnArgumentException()
     {
-        SetUserContext(_testEmployee.EmployeeId);
+        var user = UserContext.SetUserContext(_testEmployee.EmployeeId);
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = user }
+        };
 
         _mockService.Setup(service => service.GetRecentAnnouncements(_testEmployee.EmployeeId, 5))
             .ThrowsAsync(new ArgumentException("Invalid user"));
@@ -118,7 +112,11 @@ public class AnnouncementControllerTest
     [Fact]
     public async Task GetRecentAnnouncements_ReturnsServerError_OnException()
     {
-        SetUserContext(_testEmployee.EmployeeId);
+        var user = UserContext.SetUserContext(_testEmployee.EmployeeId);
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = user }
+        };
 
         _mockService.Setup(service => service.GetRecentAnnouncements(_testEmployee.EmployeeId, 5))
             .ThrowsAsync(new Exception("Database error"));
