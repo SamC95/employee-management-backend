@@ -8,14 +8,17 @@ namespace employee_management_backend.Service;
 
 public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployeeService
 {
-    public async Task CreateEmployee(Employee employee)
+    public async Task<string> CreateEmployee(Employee employee)
     {
         var hashedPassword = HashPasswordUtil.PerformPasswordHash(employee.Password ?? string.Empty);
+        var tempPassword = employee.Password;
         employee.Password = hashedPassword;
 
         employee.HasSetOwnPassword = false;
 
         await employeeRepository.CreateEmployee(employee);
+
+        return tempPassword ?? "";
     }
 
     public async Task<bool> UpdateEmployeeDetails(EmployeeUpdater patch)

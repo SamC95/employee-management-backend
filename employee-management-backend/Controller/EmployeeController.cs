@@ -17,9 +17,13 @@ public class EmployeeController(IEmployeeService employeeService) : ControllerBa
     {
         try
         {
-            await employeeService.CreateEmployee(employee);
+            var tempPassword = await employeeService.CreateEmployee(employee);
 
-            return Ok(new { message = "Employee created successfully" });
+            return Ok(new
+            {
+                message = "Employee created successfully",
+                temporaryPassword = tempPassword
+            });
         }
         catch (DbUpdateException dbEx) when (dbEx.InnerException is PostgresException { SqlState: "23505" })
         {

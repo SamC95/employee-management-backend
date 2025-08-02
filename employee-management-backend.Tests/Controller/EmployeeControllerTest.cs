@@ -1,4 +1,5 @@
-﻿using employee_management_backend.Controller;
+﻿using System.Text.Json;
+using employee_management_backend.Controller;
 using employee_management_backend.Model;
 using employee_management_backend.Service.Interface;
 using static employee_management_backend.Tests.MockObjects.MockEmployees;
@@ -34,6 +35,28 @@ public class EmployeeControllerTest
         Assert.Equal(200, okResult.StatusCode);
         Assert.NotNull(okResult.Value);
         Assert.Contains("Employee created successfully", okResult.Value.ToString());
+
+        _mockService.Verify(service => service.CreateEmployee(_testEmployee), Times.Once);
+    }
+    
+    [Fact]
+    public async Task CreateEmployee_ValidEmployee_ReturnsTempPassword()
+    {
+        const string expectedPassword = "Temp123";
+        _mockService.Setup(service => service.CreateEmployee(_testEmployee)).ReturnsAsync(expectedPassword);
+        
+        var result = await _employeeController.CreateEmployee(_testEmployee);
+
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(200, okResult.StatusCode);
+        Assert.NotNull(okResult.Value);
+        Assert.Contains("Employee created successfully", okResult.Value.ToString());
+        
+        var json = JsonSerializer.Serialize(okResult.Value);
+        var response = JsonSerializer.Deserialize<Dictionary<string, string>>(json)!;
+        
+        Assert.Equal("Employee created successfully", response["message"]);
+        Assert.Equal(expectedPassword, response["temporaryPassword"]);
 
         _mockService.Verify(service => service.CreateEmployee(_testEmployee), Times.Once);
     }

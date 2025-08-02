@@ -4,7 +4,7 @@ namespace employee_management_backend.Service.Interface;
 
 public interface IEmployeeService
 {
-    Task CreateEmployee(Employee employee);
+    Task<string> CreateEmployee(Employee employee);
     
     Task<bool> UpdateEmployeeDetails(EmployeeUpdater patch);
     
